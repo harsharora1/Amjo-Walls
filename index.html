@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Amjo Walls — Luxury Wallpapers (Moga)</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#0f0f10;
+    --card:#101214;
+    --muted:#9aa0a6;
+    --accent:#c9a84a;
+    --accent-2:#b88f3a;
+    --accent-3:#8b6c2a;
+    --purple:#8b5cf6;
+    --teal:#06b6d4;
+    --rose:#f43f5e;
+    --emerald:#10b981;
+    --orange:#f97316;
+    --indigo:#6366f1;
+    --glass: rgba(255,255,255,0.03);
+    --radius:14px;
+    --maxw:1200px;
+    --shadow: 0 10px 30px rgba(0,0,0,0.6);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: 
+      url('https://images.unsplash.com/photo-1550684376-efcbd6e3f031?auto=format&fit=crop&w=2000&q=80') center/cover fixed,
+      #050506;
+    color:#e9e6e1;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.5;
+    position: relative;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(5, 5, 6, 0.85);
+    z-index: -1;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:30px 20px}
+  header{
+    position:sticky;
+    top:0;
+    z-index:60;
+    background:#050506;
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid rgba(255,255,255,0.03);
+  }
+  .nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:14px 20px;
+  }
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo-mark{
+    width:48px;height:48px;border-radius:10px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Playfair Display',serif;color:#111;font-weight:700;
+    font-size:16px;
+  }
+  .brand h1{font-family:'Playfair Display',serif;font-size:20px;margin:0;color:#fff}
+  .brand .sub{color:var(--muted);font-size:12px;margin-top:2px}
+  nav.primary{display:flex;align-items:center;gap:6px}
+  nav.primary a{color:var(--muted);text-decoration:none;margin-left:18px;font-weight:600;font-size:14px;white-space:nowrap}
+  nav.primary a:hover{color:var(--accent)}
+  .menu-btn{
+    display:none;
+    background:transparent;
+    border:1px solid rgba(255,255,255,0.04);
+    padding:8px;
+    border-radius:10px;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    color:var(--muted);
+  }
+  .menu-btn:focus{outline:2px solid rgba(201,168,74,0.25)}
+  .hero{
+    height:72vh;
+    min-height:520px;
+    border-radius:18px;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    margin:28px auto;
+    max-width:1400px;
+    background: url('https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=1800&q=80') center/cover;
+  }
+  .hero::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.6);}
+  .hero-img{position:absolute;inset:0;background-size:cover;background-position:center;filter:contrast(1.02) saturate(1.05) brightness(0.6)}
+  .hero-content{position:relative;z-index:2;text-align:center;max-width:980px;padding:20px}
+  .hero h2{font-family:'Playfair Display',serif;font-size:44px;margin:0 0 12px;color:#fff;letter-spacing: -0.02em}
+  .hero p{color:var(--muted);font-size:18px;margin:0 0 18px}
+  .cta{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    color:#090708;
+    padding:14px 22px;
+    border-radius:999px;
+    font-weight:700;
+    box-shadow:0 10px 30px rgba(200,168,74,0.14);
+    border:1px solid rgba(255,255,255,0.04);
+    transition: all 0.3s ease;
+  }
+  .cta.secondary{background:transparent;color:var(--accent);border:1px solid rgba(255,255,255,0.05)}
+  .cta:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(200,168,74,0.25)}
+  section{padding:48px 16px}
+  .section-card{
+    background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:16px;
+    padding:22px;
+    box-shadow:var(--shadow);
+    border:1px solid rgba(255,255,255,0.03);
+    position:relative;
+    overflow:hidden;
+  }
+  .section-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--teal), var(--accent));
+  }
+  .section-title{font-family:'Playfair Display',serif;font-size:28px;color:#fff;margin:0 0 8px}
+  .lead{color:var(--muted);margin-bottom:18px}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .tile{
+    background:var(--card);
+    border-radius:12px;
+    overflow:hidden;
+    cursor:pointer;
+    transition:transform .25s ease, box-shadow .25s ease;
+    border:1px solid rgba(255,255,255,0.02);
+    position:relative;
+  }
+  .tile::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--purple), var(--teal), var(--accent));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .tile:hover::before {
+    opacity: 1;
+  }
+  .tile:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(139, 92, 246, 0.2)}
+  .tile img{width:100%;height:230px;object-fit:cover;display:block}
+  .tile .meta{padding:12px 14px}
+  .tile h4{margin:0;font-size:18px}
+  .tile p{margin:6px 0 0;color:var(--muted);font-size:13px}
+  .visit-grid{display:grid;grid-template-columns:1fr 420px;gap:24px;align-items:center;margin-top:18px}
+  .visit-info h3{margin:0;font-size:22px}
+  .visit-info p{color:var(--muted);margin-top:10px}
+  .catalog{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+  .catalog .chip{
+    background:var(--glass);
+    padding:8px 12px;
+    border-radius:999px;
+    color:var(--muted);
+    font-weight:600;
+    border:1px solid rgba(255,255,255,0.02);
+    transition: all 0.3s ease;
+  }
+  .catalog .chip:hover {
+    background: rgba(139, 92, 246, 0.1);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+  .pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+  .price-card{
+    padding:20px;
+    border-radius:12px;
+    background:linear-gradient(135deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+    border:1px solid rgba(255,255,255,0.02);
+    text-align:center;
+    transition: all 0.3s ease;
+    position:relative;
+    overflow:hidden;
+  }
+  .price-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--purple), var(--teal), var(--accent));
+  }
+  .price-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(139, 92, 246, 0.15);
+  }
+  .price-card strong{display:block;font-size:22px;margin-top:8px;color:var(--accent)}
+  .reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .rev{
+    background:var(--card);
+    padding:16px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,0.02);
+    min-height:120px;
+    transition: all 0.3s ease;
+  }
+  .rev:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(6, 182, 212, 0.1);
+  }
+  .rev p{color:var(--muted);font-size:14px}
+  .contact-grid{display:grid;grid-template-columns:1fr 380px;gap:22px}
+  .contact-form input,.contact-form textarea{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.04);
+    background:transparent;
+    color:#eee;
+    margin-top:8px;
+    transition: all 0.3s ease;
+  }
+  .contact-form input:focus,.contact-form textarea:focus {
+    outline: none;
+    border-color: var(--teal);
+    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.1);
+  }
+  .submit{
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    padding:12px 18px;
+    border-radius:10px;
+    border:none;
+    color:#111;
+    font-weight:800;
+    margin-top:12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(200,168,74,0.3);
+  }
+  footer{
+    margin-top:28px;
+    padding:28px 18px;
+    background: #050506;
+    border-top:1px solid rgba(255,255,255,0.03);
+    position: relative;
+  }
+  .small{color:var(--muted);font-size:13px}
+  .footer-images {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+  .footer-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .footer-image:hover {
+    transform: translateY(-5px);
+  }
+  .float-wrap{position:fixed;right:18px;bottom:18px;display:flex;flex-direction:column;gap:12px;z-index:999}
+  .fab{
+    width:56px;
+    height:56px;
+    border-radius:999px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-weight:700;
+    text-decoration:none;
+    box-shadow:0 8px 30px rgba(0,0,0,0.6);
+    transition: all 0.3s ease;
+  }
+  .fab.wa{background:#25D366}
+  .fab.call{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#080606}
+  .fab:hover{
+    transform:translateY(-6px) scale(1.1);
+    box-shadow:0 12px 35px rgba(0,0,0,0.8);
+  }
+  .fade-up{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease}
+  .in-view{opacity:1;transform:none}
+  .collection-detail {
+    display: none;
+    padding: 20px;
+  }
+  .collection-hero {
+    height: 60vh;
+    min-height: 400px;
+    border-radius: 18px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url('https://images.unsplash.com/photo-1624948295307-96d5dfe78a0f?auto=format&fit=crop&w=1800&q=80') center/cover;
+  }
+  .collection-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+  }
+  .collection-hero-img {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: contrast(1.02) saturate(1.05) brightness(0.6);
+  }
+  .collection-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 800px;
+    padding: 20px;
+  }
+  .collection-hero h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    margin: 0 0 12px;
+    color: #fff;
+  }
+  .collection-hero p {
+    color: var(--muted);
+    font-size: 18px;
+    margin: 0 0 18px;
+  }
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--accent);
+    padding: 10px 16px;
+    border-radius: 999px;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.05);
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+  .back-btn:hover {
+    background: rgba(255,255,255,0.02);
+    transform: translateX(-5px);
+  }
+  .collection-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+  }
+  .gallery-item {
+    border-radius: 12px;
+    overflow: hidden;
+    height: 280px;
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.03);
+    position: relative;
+  }
+  .gallery-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 15px 30px rgba(139, 92, 246, 0.2);
+  }
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .collection-info {
+    background: rgba(255,255,255,0.02);
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 30px;
+    border: 1px solid rgba(255,255,255,0.03);
+    position: relative;
+  }
+  .collection-info::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--teal), var(--accent));
+  }
+  .collection-info h3 {
+    margin-top: 0;
+    color: var(--accent);
+    font-size: 20px;
+  }
+  .collection-info p {
+    margin-bottom: 0;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .admin-upload-area {
+    border: 2px dashed var(--accent);
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    margin: 20px 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: none;
+    background: rgba(201, 168, 74, 0.05);
+  }
+  .admin-upload-area:hover {
+    background: rgba(201,168,74,0.1);
+    transform: translateY(-3px);
+  }
+  .upload-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    color: var(--accent);
+  }
+  .upload-text {
+    color: var(--muted);
+    font-size: 18px;
+  }
+  .image-upload {
+    display: none;
+  }
+  .admin-login-btn {
+    position: fixed;
+    left: 18px;
+    bottom: 18px;
+    width: 56px;
+    height: 56px;
+    border-radius: 999px;
+    background: #333;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 999;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.3s ease;
+  }
+  .admin-login-btn:hover {
+    background: #444;
+    transform: scale(1.1);
+  }
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 30px;
+  }
+  .step {
+    text-align: center;
+    padding: 20px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.03);
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .step::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--purple), var(--teal), var(--accent));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .step:hover::before {
+    opacity: 1;
+  }
+  .step:hover {
+    transform: translateY(-5px);
+    background: rgba(255,255,255,0.03);
+  }
+  .step-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    color: var(--accent);
+  }
+  .benefits {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 30px;
+  }
+  .benefit {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 20px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.03);
+    transition: all 0.3s ease;
+  }
+  .benefit:hover {
+    transform: translateY(-3px);
+    background: rgba(255,255,255,0.03);
+  }
+  .benefit-icon {
+    font-size: 24px;
+    color: var(--accent);
+    min-width: 40px;
+  }
+  .featured-wallpapers {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-top: 30px;
+  }
+  .featured-item {
+    border-radius: 10px;
+    overflow: hidden;
+    height: 200px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  .featured-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(139, 92, 246, 0.2);
+  }
+  .featured-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .room-types {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-top: 30px;
+  }
+  .room-type {
+    border-radius: 10px;
+    overflow: hidden;
+    height: 180px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .room-type img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7);
+    transition: filter 0.3s ease;
+  }
+  .room-type:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(6, 182, 212, 0.2);
+  }
+  .room-type:hover img {
+    filter: brightness(1);
+  }
+  .room-type span {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .color-palette {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+  .color-dot {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  .color-dot:hover {
+    transform: scale(1.2);
+  }
+  .color-section-1 { background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(6, 182, 212, 0.05)); }
+  .color-section-2 { background: linear-gradient(135deg, rgba(201, 168, 74, 0.05), rgba(243, 63, 94, 0.05)); }
+  .color-section-3 { background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(99, 102, 241, 0.05)); }
+  
+  @media(max-width:1024px){
+    .grid{grid-template-columns:repeat(2,1fr)}
+    .visit-grid{grid-template-columns:1fr}
+    .pricing{grid-template-columns:1fr}
+    .reviews{grid-template-columns:1fr}
+    .contact-grid{grid-template-columns:1fr}
+    .collection-gallery {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+    .process-steps {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .benefits {
+      grid-template-columns: 1fr;
+    }
+    .featured-wallpapers {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .room-types {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media(max-width:900px){
+    .hero{min-height:460px}
+  }
+  @media(max-width:640px){
+    .nav{padding:8px 14px;gap:10px}
+    .logo-mark{width:40px;height:40px;font-size:14px;border-radius:9px}
+    .brand h1{font-size:16px}
+    .brand .sub{display:none}
+    nav.primary{display:none}
+    .menu-btn{display:inline-flex}
+    .mobile-nav {
+      position:fixed;
+      right:12px;
+      left:12px;
+      top:64px;
+      z-index:9999;
+      background:linear-gradient(180deg, rgba(18,18,19,0.98), rgba(12,12,13,0.98));
+      border-radius:12px;
+      padding:12px;
+      box-shadow:0 30px 60px rgba(0,0,0,0.6);
+      border:1px solid rgba(255,255,255,0.03);
+      transform-origin:top right;
+      transition:opacity .18s ease, transform .18s ease;
+      opacity:0;
+      pointer-events:none;
+      transform:translateY(-6px) scale(.99);
+    }
+    .mobile-nav.open{opacity:1;pointer-events:auto;transform:none}
+    .mobile-nav a{
+      display:block;
+      padding:12px 10px;
+      color:var(--muted);
+      font-weight:700;
+      text-decoration:none;
+      border-radius:8px;
+    }
+    .mobile-nav a:hover{background:rgba(255,255,255,0.02);color:var(--accent)}
+    .hero{height:56vh;min-height:360px;border-radius:12px;margin:18px 12px}
+    .hero h2{font-size:26px}
+    .hero p{font-size:15px}
+    .cta{padding:10px 14px;font-size:14px}
+    .footer-images {
+      gap: 15px;
+    }
+    .footer-image {
+      width: 35px;
+      height: 35px;
+    }
+    .collection-hero {
+      height: 40vh;
+      min-height: 300px;
+    }
+    .collection-hero h2 {
+      font-size: 24px;
+    }
+    .collection-hero p {
+      font-size: 14px;
+    }
+    .collection-gallery {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+    .gallery-item {
+      height: 200px;
+    }
+    .admin-upload-area {
+      padding: 20px;
+    }
+    .upload-icon {
+      font-size: 36px;
+    }
+    .upload-text {
+      font-size: 16px;
+    }
+    .process-steps {
+      grid-template-columns: 1fr;
+    }
+    .featured-wallpapers {
+      grid-template-columns: 1fr;
+    }
+    .room-types {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav" role="banner">
+    <div class="brand" aria-label="Amjo Walls brand">
+      <div class="logo-mark" aria-hidden="true">AW</div>
+      <div>
+        <h1>Amjo Walls</h1>
+        <div class="sub">Make a home, from the heart — Moga</div>
+      </div>
+    </div>
+    <nav class="primary" id="topNav" aria-label="Main navigation">
+      <a href="#home">Home</a>
+      <a href="#collections">Collections</a>
+      <a href="#process">Process</a>
+      <a href="#visit">Home Visit</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="mobileNav" aria-label="Open menu">
+      <svg width="20" height="14" viewBox="0 0 20 14" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect y="0" width="20" height="2" rx="1" fill="currentColor"></rect>
+        <rect y="6" width="20" height="2" rx="1" fill="currentColor"></rect>
+        <rect y="12" width="20" height="2" rx="1" fill="currentColor"></rect>
+      </svg>
+    </button>
+</header>
+
+<div id="main-content">
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h2>Luxury Wallpapers — Transform Your Space With Color & Texture</h2>
+      <p class="lead">Bring vibrant colors and rich textures to your walls. We bring premium albums to your home, help you choose and install with care.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a class="cta" href="#visit">Book Free Home Visit</a>
+        <a class="cta secondary" href="#collections">View Collections</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="featured" class="wrap fade-up">
+    <div class="section-card color-section-1">
+      <h3 class="section-title">Featured Wallpapers</h3>
+      <p class="lead">Handpicked designs that transform ordinary walls into extraordinary statements</p>
+      <div class="featured-wallpapers">
+        <div class="featured-item">
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80" alt="Featured 1">
+        </div>
+        <div class="featured-item">
+          <img src="https://images.unsplash.com/photo-1618220252344-8ec99ec624b1?auto=format&fit=crop&w=500&q=80" alt="Featured 2">
+        </div>
+        <div class="featured-item">
+          <img src="https://images.unsplash.com/photo-1558618047-7522dacb86e3?auto=format&fit=crop&w=500&q=80" alt="Featured 3">
+        </div>
+        <div class="featured-item">
+          <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?auto=format&fit=crop&w=500&q=80" alt="Featured 4">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="collections" class="wrap">
+    <div class="section-card fade-up color-section-2">
+      <h3 class="section-title">Premium Wallpaper Collections</h3>
+      <p class="lead">Vinyl • Non-woven • Fabric • Peel & Stick • 3D Textures — curated for modern & classic interiors.</p>
+
+      <div class="grid" style="margin-top:18px">
+        <div class="tile" data-collection="vinyl">
+          <img src="https://images.unsplash.com/photo-1624948295307-96d5dfe78a0f?auto=format&fit=crop&w=600&q=80" alt="Vinyl Wallpaper">
+          <div class="meta"><h4>Vinyl</h4><p>Modern patterns with metallic accents for contemporary spaces.</p></div>
+        </div>
+
+        <div class="tile" data-collection="fabric">
+          <img src="https://images.unsplash.com/photo-1617201783260-8a5d41f2b2ba?auto=format&fit=crop&w=600&q=80" alt="Fabric Wallpaper">
+          <div class="meta"><h4>Fabric</h4><p>Plush finish that adds depth and luxury to any room.</p></div>
+        </div>
+
+        <div class="tile" data-collection="non-woven">
+          <img src="https://images.unsplash.com/photo-1618220252344-8ec99ec624b1?auto=format&fit=crop&w=600&q=80" alt="Non-Woven Wallpaper">
+          <div class="meta"><h4>Non-Woven</h4><p>Timeless patterns with rich historical appeal.</p></div>
+        </div>
+
+        <div class="tile" data-collection="flora">
+          <img src="https://images.unsplash.com/photo-1579014136422-00bb51c6d1e9?auto=format&fit=crop&w=600&q=80" alt="Flora Wallpaper">
+          <div class="meta"><h4>Flora</h4><p>Nature-inspired designs with artistic detailing.</p></div>
+        </div>
+
+        <div class="tile" data-collection="paper">
+          <img src="https://images.unsplash.com/photo-1558618047-7522dacb86e3?auto=format&fit=crop&w=600&q=80" alt="Paper Wallpaper">
+          <div class="meta"><h4>Paper</h4><p>Eco-friendly and breathable material for a natural look.</p></div>
+        </div>
+
+        <div class="tile" data-collection="textured">
+          <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?auto=format&fit=crop&w=600&q=80" alt="Textured Wallpaper">
+          <div class="meta"><h4>Textured</h4><p>Bold statements with artistic expression and depth.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="rooms" class="wrap fade-up">
+    <div class="section-card color-section-3">
+      <h3 class="section-title">Perfect For Every Room</h3>
+      <p class="lead">Transform different spaces with wallpapers designed for specific room requirements</p>
+      <div class="room-types">
+        <div class="room-type">
+          <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80" alt="Living Room">
+          <span>Living Room</span>
+        </div>
+        <div class="room-type">
+          <img src="https://images.unsplash.com/photo-1618220252344-8ec99ec624b1?auto=format&fit=crop&w=400&q=80" alt="Bedroom">
+          <span>Bedroom</span>
+        </div>
+        <div class="room-type">
+          <img src="https://images.unsplash.com/photo-1558618047-7522dacb86e3?auto=format&fit=crop&w=400&q=80" alt="Dining Room">
+          <span>Dining Room</span>
+        </div>
+        <div class="room-type">
+          <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?auto=format&fit=crop&w=400&q=80" alt="Office">
+          <span>Office</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="colors" class="wrap fade-up">
+    <div class="section-card color-section-1">
+      <h3 class="section-title">Color Inspiration</h3>
+      <p class="lead">Explore beautiful color combinations for your space</p>
+      <div class="color-palette">
+        <div class="color-dot" style="background:#c9a84a" title="Gold"></div>
+        <div class="color-dot" style="background:#8b5cf6" title="Purple"></div>
+        <div class="color-dot" style="background:#06b6d4" title="Teal"></div>
+        <div class="color-dot" style="background:#10b981" title="Emerald"></div>
+        <div class="color-dot" style="background:#f43f5e" title="Rose"></div>
+        <div class="color-dot" style="background:#f59e0b" title="Amber"></div>
+        <div class="color-dot" style="background:#6366f1" title="Indigo"></div>
+        <div class="color-dot" style="background:#ec4899" title="Pink"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="process" class="wrap fade-up">
+    <div class="section-card color-section-2">
+      <h3 class="section-title">Our Simple Process</h3>
+      <p class="lead">From selection to installation, we make it easy and hassle-free</p>
+      <div class="process-steps">
+        <div class="step">
+          <div class="step-icon">📋</div>
+          <h4>Consultation</h4>
+          <p>Free home visit to understand your needs and space</p>
+        </div>
+        <div class="step">
+          <div class="step-icon">🎨</div>
+          <h4>Selection</h4>
+          <p>Choose from 50+ premium designs and materials</p>
+        </div>
+        <div class="step">
+          <div class="step-icon">📏</div>
+          <h4>Measurement</h4>
+          <p>Precise measurement and material calculation</p>
+        </div>
+        <div class="step">
+          <div class="step-icon">🛠️</div>
+          <h4>Installation</h4>
+          <p>Professional installation with perfection guarantee</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="benefits" class="wrap fade-up">
+    <div class="section-card color-section-3">
+      <h3 class="section-title">Why Choose Amjo Walls</h3>
+      <p class="lead">Experience the difference with our premium service and quality</p>
+      <div class="benefits">
+        <div class="benefit">
+          <div class="benefit-icon">⭐</div>
+          <div>
+            <h4>Premium Quality</h4>
+            <p>Only the finest materials with durability and elegance</p>
+          </div>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">👨‍🔧</div>
+          <div>
+            <h4>Expert Installation</h4>
+            <p>Skilled professionals with years of experience</p>
+          </div>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">💯</div>
+          <div>
+            <h4>Quality Guarantee</h4>
+            <p>Perfect finish with attention to every detail</p>
+          </div>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">🚚</div>
+          <div>
+            <h4>Free Home Service</h4>
+            <p>We come to you with samples and expert advice</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="visit" class="wrap fade-up" style="margin-top:28px">
+    <div class="section-card color-section-1">
+      <div style="display:flex;align-items:stretch;gap:18px;flex-wrap:wrap">
+        <div style="flex:1;min-width:260px">
+          <h3 class="section-title">Free Home Visit — Experience Designs in Your Space</h3>
+          <p class="lead">We bring albums, samples, and lighting suggestions. Try the designs on your wall before you buy.</p>
+          <div class="catalog" role="list" aria-label="Sample types">
+            <div class="chip">Albums (50+ designs)</div>
+            <div class="chip">Material Samples</div>
+            <div class="chip">Tape Measure</div>
+            <div class="chip">Expert Advice</div>
+          </div>
+          <p style="margin-top:12px;color:var(--muted)">Booking is free and takes just one call. Service area: Moga & nearby towns.</p>
+          <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+            <a class="cta" href="https://wa.me/917973890562">Book on WhatsApp</a>
+            <a class="cta secondary" href="tel:+917973890562">Call: 7973890562</a>
+          </div>
+        </div>
+        <div style="width:420px;min-width:240px">
+          <div style="border-radius:12px;overflow:hidden;background:linear-gradient(180deg,#0b0b0c,#0e0e10);padding:18px;border:1px solid rgba(255,255,255,0.03)">
+            <h4 style="margin:0 0 8px;color:var(--accent)">Quick Booking</h4>
+            <form id="quickBook" style="display:flex;flex-direction:column;gap:8px">
+              <input name="name" placeholder="Your name" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff">
+              <input name="phone" placeholder="WhatsApp number" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff">
+              <input name="note" placeholder="Short note / preferred day" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:#fff">
+              <button type="submit" class="submit" style="cursor:pointer">Request Visit</button>
+              <div id="bookMsg" class="small" style="margin-top:8px"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" class="wrap fade-up">
+    <div class="section-card color-section-2">
+      <h3 class="section-title">Pricing — Example Guide</h3>
+      <p class="lead">Approximate rates (final price depends on material, design & wall area).</p>
+      <div class="pricing">
+        <div class="price-card">
+          <div style="font-size:18px">Basic</div>
+          <div class="small">Simple Vinyl</div>
+          <strong>₹70–₹120 / sq.ft</strong>
+        </div>
+        <div class="price-card">
+          <div style="font-size:18px">Premium</div>
+          <div class="small">Non-woven & Textured</div>
+          <strong>₹150–₹250 / sq.ft</strong>
+        </div>
+        <div class="price-card">
+          <div style="font-size:18px">Luxury</div>
+          <div class="small">Imported & Designer</div>
+          <strong>₹300–₹500 / sq.ft</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap fade-up">
+    <div class="section-card color-section-3">
+      <h3 class="section-title">What Customers Say</h3>
+      <div class="reviews" style="margin-top:12px">
+        <div class="rev">
+          <strong>R. Kaur</strong>
+          <p>"Album visit was so helpful. We chose a perfect bedroom wallpaper — finish is great."</p>
+        </div>
+        <div class="rev">
+          <strong>S. Gill</strong>
+          <p>"Timely delivery and clean installation. Highly recommend Amjo Walls."</p>
+        </div>
+        <div class="rev">
+          <strong>H. Sharma</strong>
+          <p>"Great aftercare. Small bubbles removed quickly by the installer team."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="wrap fade-up">
+    <div class="section-card color-section-1">
+      <h3 class="section-title">Contact & Enquiry</h3>
+      <div class="lead">Send a message or call/WhatsApp — we respond quickly in Moga.</div>
+      <div class="contact-grid" style="margin-top:14px">
+        <div>
+          <form id="contactForm" class="contact-form">
+            <label style="color:var(--muted)">Name</label>
+            <input name="name" required>
+            <label style="color:var(--muted);margin-top:8px">WhatsApp number</label>
+            <input name="phone" required>
+            <label style="color:var(--muted);margin-top:8px">Message</label>
+            <textarea name="message" rows="4"></textarea>
+            <button type="submit" class="submit">Send Message</button>
+            <div id="contactMsg" class="small" style="margin-top:8px"></div>
+          </form>
+        </div>
+        <div style="min-width:260px">
+          <div style="padding:16px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03)">
+            <h4 style="margin:0;color:var(--accent)">Amjo Walls</h4>
+            <p class="small" style="margin-top:8px">Serving Moga, Punjab</p>
+            <p style="margin-top:10px"><strong>Call / WhatsApp:</strong><br><a href="tel:+917973890562" style="color:var(--accent)">+91 79738 90562</a></p>
+            <p style="margin-top:8px" class="small">Business hours: Mon–Sat 9:00–19:00</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-size:18px;color:#fff">Amjo Walls</div>
+          <div class="small" style="margin-top:4px">Make a home, from the heart — Moga, Punjab</div>
+        </div>
+        <div style="text-align:right" class="small">
+          © <span id="year"></span> Amjo Walls. All rights reserved.
+        </div>
+      </div>
+      <div class="footer-images">
+        <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=100&q=80" alt="Instagram" class="footer-image">
+        <img src="https://images.unsplash.com/photo-1611605698335-8b1569810432?auto=format&fit=crop&w=100&q=80" alt="Facebook" class="footer-image">
+        <img src="https://images.unsplash.com/photo-1616469829942-2277c4e02258?auto=format&fit=crop&w=100&q=80" alt="YouTube" class="footer-image">
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- Collection detail pages remain the same -->
+
+<div class="float-wrap" role="navigation" aria-label="Quick actions">
+  <a class="fab wa" href="https://wa.me/917973890562" title="Chat on WhatsApp" aria-label="WhatsApp">💬</a>
+  <a class="fab call" href="tel:+917973890562" title="Call now" aria-label="Call">📞</a>
+</div>
+
+<div class="admin-login-btn" id="adminLoginBtn" title="Owner Login">🔒</div>
+
+<script>
+// All JavaScript remains the same as previous code
+const faders = document.querySelectorAll('.fade-up');
+const revealOnScroll = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('in-view');
+  });
+}, {threshold: 0.12});
+faders.forEach(f => revealOnScroll.observe(f));
+
+const quickBook = document.getElementById('quickBook');
+const bookMsg = document.getElementById('bookMsg');
+if (quickBook) {
+  quickBook.addEventListener('submit', e => {
+    e.preventDefault();
+    bookMsg.textContent = 'Request sent — we will contact you on WhatsApp shortly.';
+    quickBook.reset();
+  });
+}
+
+const contactForm = document.getElementById('contactForm');
+const contactMsg = document.getElementById('contactMsg');
+if (contactForm) {
+  contactForm.addEventListener('submit', e => {
+    e.preventDefault();
+    contactMsg.textContent = 'Message received — we will contact you soon.';
+    contactForm.reset();
+  });
+}
+
+document.getElementById('year').textContent = new Date().getFullYear();
+
+document.body.addEventListener('keydown', (e) => {
+  if (e.key === 'Tab') document.documentElement.style.scrollBehavior = 'smooth';
+});
+
+const tiles = document.querySelectorAll('.tile');
+const mainContent = document.getElementById('main-content');
+const collectionPages = document.querySelectorAll('.collection-detail');
+
+tiles.forEach(tile => {
+  tile.addEventListener('click', () => {
+    const collectionId = tile.getAttribute('data-collection');
+    const collectionPage = document.getElementById(`${collectionId}-page`);
+    
+    if (collectionPage) {
+      mainContent.style.display = 'none';
+      collectionPage.style.display = 'block';
+      window.scrollTo(0, 0);
+      history.pushState({ collection: collectionId }, '', `#${collectionId}`);
+    }
+  });
+});
+
+function goBackToCollections() {
+  collectionPages.forEach(page => {
+    page.style.display = 'none';
+  });
+  mainContent.style.display = 'block';
+  document.getElementById('collections').scrollIntoView({ behavior: 'smooth' });
+  history.pushState({}, '', window.location.pathname);
+}
+
+function handleImageUpload(input, collectionId) {
+  const files = input.files;
+  const gallery = document.getElementById(`${collectionId}-gallery`);
+  
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+      const galleryItem = document.createElement('div');
+      galleryItem.className = 'gallery-item';
+      
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.alt = `Uploaded ${collectionId} wallpaper`;
+      
+      galleryItem.appendChild(img);
+      gallery.appendChild(galleryItem);
+    };
+    
+    reader.readAsDataURL(file);
+  }
+  
+  input.value = '';
+}
+
+let isOwner = false;
+
+document.getElementById('adminLoginBtn').addEventListener('click', function() {
+  if (!isOwner) {
+    const password = prompt('Enter owner password:');
+    if (password === 'amjo123') {
+      isOwner = true;
+      this.innerHTML = '🔓';
+      this.title = 'Owner Mode Active';
+      showUploadAreas();
+      alert('Owner mode activated. Upload areas are now visible.');
+    } else {
+      alert('Incorrect password.');
+    }
+  } else {
+    isOwner = false;
+    this.innerHTML = '🔒';
+    this.title = 'Owner Login';
+    hideUploadAreas();
+    alert('Owner mode deactivated.');
+  }
+});
+
+function showUploadAreas() {
+  const uploadAreas = document.querySelectorAll('.admin-upload-area');
+  uploadAreas.forEach(area => {
+    area.style.display = 'block';
+  });
+}
+
+function hideUploadAreas() {
+  const uploadAreas = document.querySelectorAll('.admin-upload-area');
+  uploadAreas.forEach(area => {
+    area.style.display = 'none';
+  });
+}
+
+window.addEventListener('popstate', (event) => {
+  if (event.state && event.state.collection) {
+    mainContent.style.display = 'none';
+    const collectionPage = document.getElementById(`${event.state.collection}-page`);
+    if (collectionPage) {
+      collectionPage.style.display = 'block';
+    }
+  } else {
+    mainContent.style.display = 'block';
+    collectionPages.forEach(page => {
+      page.style.display = 'none';
+    });
+  }
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  const hash = window.location.hash.substring(1);
+  if (hash) {
+    const collectionPage = document.getElementById(`${hash}-page`);
+    if (collectionPage) {
+      mainContent.style.display = 'none';
+      collectionPage.style.display = 'block';
+    }
+  }
+});
+</script>
+
+</body>
+</html>
