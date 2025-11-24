@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Amjo Walls — Luxury Wallpapers (Moga)</title>
+<title>Amjo Walls — Luxury Wallpapers & Wall Decor (Moga)</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
@@ -624,6 +624,209 @@
   .color-section-2 { background: linear-gradient(135deg, rgba(201, 168, 74, 0.05), rgba(243, 63, 94, 0.05)); }
   .color-section-3 { background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(99, 102, 241, 0.05)); }
   
+  /* Wall Decor Accessories Styles */
+  .accessories-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 30px;
+  }
+  .accessory-item {
+    background: var(--card);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.02);
+    position: relative;
+  }
+  .accessory-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--purple), var(--teal), var(--accent));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .accessory-item:hover::before {
+    opacity: 1;
+  }
+  .accessory-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+  }
+  .accessory-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+  }
+  .accessory-details {
+    padding: 16px;
+    position: relative;
+  }
+  .accessory-name {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .accessory-description {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0 0 12px;
+    line-height: 1.5;
+  }
+  .accessory-price {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 18px;
+    margin: 0;
+  }
+  .accessory-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(201, 168, 74, 0.1);
+    color: var(--accent);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(201, 168, 74, 0.2);
+  }
+  .accessory-cta:hover {
+    background: rgba(201, 168, 74, 0.2);
+    transform: translateY(-2px);
+  }
+  .accessory-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+  }
+  .accessory-category {
+    background: var(--glass);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: var(--muted);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .accessory-category:hover, .accessory-category.active {
+    background: rgba(139, 92, 246, 0.1);
+    color: #fff;
+  }
+  .accessory-filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  /* Product Upload Form Styles */
+  .product-upload-form {
+    display: none;
+    background: rgba(255,255,255,0.02);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+    border: 1px solid rgba(255,255,255,0.03);
+    position: relative;
+  }
+  .product-upload-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--teal), var(--accent));
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.04);
+    background: transparent;
+    color: #eee;
+    transition: all 0.3s ease;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: var(--teal);
+    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.1);
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+  .image-preview {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 10px;
+    display: none;
+  }
+  .delete-btn {
+    background: rgba(244, 63, 94, 0.1);
+    color: var(--rose);
+    border: 1px solid rgba(244, 63, 94, 0.2);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+  }
+  .delete-btn:hover {
+    background: rgba(244, 63, 94, 0.2);
+    transform: translateY(-2px);
+  }
+  .delete-product-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(244, 63, 94, 0.8);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
+  .accessory-item:hover .delete-product-btn {
+    opacity: 1;
+  }
+  .delete-product-btn:hover {
+    background: rgba(244, 63, 94, 1);
+    transform: scale(1.1);
+  }
+  
   @media(max-width:1024px){
     .grid{grid-template-columns:repeat(2,1fr)}
     .visit-grid{grid-template-columns:1fr}
@@ -644,6 +847,12 @@
     }
     .room-types {
       grid-template-columns: repeat(2, 1fr);
+    }
+    .accessories-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .form-row {
+      grid-template-columns: 1fr;
     }
   }
   @media(max-width:900px){
@@ -728,6 +937,16 @@
     .room-types {
       grid-template-columns: 1fr;
     }
+    .accessories-grid {
+      grid-template-columns: 1fr;
+    }
+    .accessory-filter {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .delete-product-btn {
+      opacity: 1;
+    }
   }
 </style>
 </head>
@@ -745,6 +964,7 @@
     <nav class="primary" id="topNav" aria-label="Main navigation">
       <a href="#home">Home</a>
       <a href="#collections">Collections</a>
+      <a href="#accessories">Wall Decor</a>
       <a href="#process">Process</a>
       <a href="#visit">Home Visit</a>
       <a href="#pricing">Pricing</a>
@@ -762,7 +982,7 @@
 <div id="main-content">
   <section id="home" class="hero">
     <div class="hero-content">
-      <h2>Luxury Wallpapers — Transform Your Space With Color & Texture</h2>
+      <h2>Luxury Wallpapers & Wall Decor — Transform Your Space With Color & Texture</h2>
       <p class="lead">Bring vibrant colors and rich textures to your walls. We bring premium albums to your home, help you choose and install with care.</p>
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
         <a class="cta" href="#visit">Book Free Home Visit</a>
@@ -831,8 +1051,73 @@
     </div>
   </section>
 
-  <section id="rooms" class="wrap fade-up">
+  <!-- Wall Decor Accessories Section -->
+  <section id="accessories" class="wrap fade-up">
     <div class="section-card color-section-3">
+      <h3 class="section-title">Wall Decor Accessories</h3>
+      <p class="lead">Complete your interior with our premium wall decor accessories that complement any wallpaper</p>
+      
+      <!-- Product Upload Form (Admin Only) -->
+      <div class="product-upload-form" id="productUploadForm">
+        <h3 style="color: var(--accent); margin-top: 0;">Add New Product</h3>
+        <form id="newProductForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="productName">Product Name</label>
+              <input type="text" id="productName" required>
+            </div>
+            <div class="form-group">
+              <label for="productPrice">Price (₹)</label>
+              <input type="text" id="productPrice" placeholder="₹2,499" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="productDescription">Description</label>
+            <textarea id="productDescription" rows="3" required></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="productCategory">Category</label>
+              <select id="productCategory" required>
+                <option value="wall-art">Wall Art</option>
+                <option value="mirrors">Mirrors</option>
+                <option value="shelves">Shelves</option>
+                <option value="clocks">Clocks</option>
+                <option value="decor">Decor Pieces</option>
+                <option value="lighting">Lighting</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="productImage">Product Image</label>
+              <input type="file" id="productImage" accept="image/*" required>
+              <img id="imagePreview" class="image-preview" src="" alt="Image Preview">
+            </div>
+          </div>
+          <button type="submit" class="submit">Add Product</button>
+          <button type="button" class="delete-btn" id="clearForm" style="margin-left: 10px;">Clear Form</button>
+        </form>
+      </div>
+      
+      <div class="accessory-filter">
+        <div class="accessory-categories">
+          <div class="accessory-category active" data-category="all">All</div>
+          <div class="accessory-category" data-category="wall-art">Wall Art</div>
+          <div class="accessory-category" data-category="mirrors">Mirrors</div>
+          <div class="accessory-category" data-category="shelves">Shelves</div>
+          <div class="accessory-category" data-category="clocks">Clocks</div>
+          <div class="accessory-category" data-category="decor">Decor Pieces</div>
+          <div class="accessory-category" data-category="lighting">Lighting</div>
+        </div>
+      </div>
+      
+      <div class="accessories-grid" id="accessories-grid">
+        <!-- Products will be dynamically added here -->
+      </div>
+    </div>
+  </section>
+
+  <section id="rooms" class="wrap fade-up">
+    <div class="section-card color-section-1">
       <h3 class="section-title">Perfect For Every Room</h3>
       <p class="lead">Transform different spaces with wallpapers designed for specific room requirements</p>
       <div class="room-types">
@@ -857,7 +1142,7 @@
   </section>
 
   <section id="colors" class="wrap fade-up">
-    <div class="section-card color-section-1">
+    <div class="section-card color-section-2">
       <h3 class="section-title">Color Inspiration</h3>
       <p class="lead">Explore beautiful color combinations for your space</p>
       <div class="color-palette">
@@ -874,7 +1159,7 @@
   </section>
 
   <section id="process" class="wrap fade-up">
-    <div class="section-card color-section-2">
+    <div class="section-card color-section-3">
       <h3 class="section-title">Our Simple Process</h3>
       <p class="lead">From selection to installation, we make it easy and hassle-free</p>
       <div class="process-steps">
@@ -903,7 +1188,7 @@
   </section>
 
   <section id="benefits" class="wrap fade-up">
-    <div class="section-card color-section-3">
+    <div class="section-card color-section-1">
       <h3 class="section-title">Why Choose Amjo Walls</h3>
       <p class="lead">Experience the difference with our premium service and quality</p>
       <div class="benefits">
@@ -940,7 +1225,7 @@
   </section>
 
   <section id="visit" class="wrap fade-up" style="margin-top:28px">
-    <div class="section-card color-section-1">
+    <div class="section-card color-section-2">
       <div style="display:flex;align-items:stretch;gap:18px;flex-wrap:wrap">
         <div style="flex:1;min-width:260px">
           <h3 class="section-title">Free Home Visit — Experience Designs in Your Space</h3>
@@ -974,7 +1259,7 @@
   </section>
 
   <section id="pricing" class="wrap fade-up">
-    <div class="section-card color-section-2">
+    <div class="section-card color-section-3">
       <h3 class="section-title">Pricing — Example Guide</h3>
       <p class="lead">Approximate rates (final price depends on material, design & wall area).</p>
       <div class="pricing">
@@ -998,7 +1283,7 @@
   </section>
 
   <section class="wrap fade-up">
-    <div class="section-card color-section-3">
+    <div class="section-card color-section-1">
       <h3 class="section-title">What Customers Say</h3>
       <div class="reviews" style="margin-top:12px">
         <div class="rev">
@@ -1018,7 +1303,7 @@
   </section>
 
   <section id="contact" class="wrap fade-up">
-    <div class="section-card color-section-1">
+    <div class="section-card color-section-2">
       <h3 class="section-title">Contact & Enquiry</h3>
       <div class="lead">Send a message or call/WhatsApp — we respond quickly in Moga.</div>
       <div class="contact-grid" style="margin-top:14px">
@@ -1066,7 +1351,183 @@
   </footer>
 </div>
 
-<!-- Collection detail pages remain the same -->
+<!-- Collection Detail Pages -->
+<div id="vinyl-page" class="collection-detail wrap">
+  <button class="back-btn" onclick="goBackToCollections()">← Back to Collections</button>
+  
+  <div class="collection-hero">
+    <div class="collection-hero-content">
+      <h2>Vinyl Collection</h2>
+      <p>Modern patterns with metallic accents for contemporary spaces</p>
+    </div>
+  </div>
+  
+  <div class="admin-upload-area" onclick="document.getElementById('vinyl-upload').click()">
+    <div class="upload-icon">📤</div>
+    <div class="upload-text">Click to upload images for this collection</div>
+    <input type="file" id="vinyl-upload" class="image-upload" multiple accept="image/*" onchange="handleImageUpload(this, 'vinyl')">
+  </div>
+  
+  <div class="collection-gallery" id="vinyl-gallery">
+    <div class="gallery-item">
+      <img src="https://m.media-amazon.com/images/I/910+NIyHX5S._AC_UF1000,1000_QL80_.jpg" alt="Vinyl Wallpaper 1">
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80" alt="Vinyl Wallpaper 2">
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1618220252344-8ec99ec624b1?auto=format&fit=crop&w=500&q=80" alt="Vinyl Wallpaper 3">
+    </div>
+  </div>
+  
+  <div class="collection-info">
+    <h3>About Vinyl Wallpapers</h3>
+    <p>Vinyl wallpapers are known for their durability and moisture resistance, making them perfect for kitchens, bathrooms, and high-traffic areas. They come in a wide range of patterns and textures, from subtle geometrics to bold metallic accents that add a contemporary touch to any space.</p>
+  </div>
+</div>
+
+<div id="fabric-page" class="collection-detail wrap">
+  <button class="back-btn" onclick="goBackToCollections()">← Back to Collections</button>
+  
+  <div class="collection-hero">
+    <div class="collection-hero-content">
+      <h2>Fabric Collection</h2>
+      <p>Plush finish that adds depth and luxury to any room</p>
+    </div>
+  </div>
+  
+  <div class="admin-upload-area" onclick="document.getElementById('fabric-upload').click()">
+    <div class="upload-icon">📤</div>
+    <div class="upload-text">Click to upload images for this collection</div>
+    <input type="file" id="fabric-upload" class="image-upload" multiple accept="image/*" onchange="handleImageUpload(this, 'fabric')">
+  </div>
+  
+  <div class="collection-gallery" id="fabric-gallery">
+    <div class="gallery-item">
+      <img src="https://www.giffywalls.in/cdn/shop/files/2977_49_B383Greycementbackground.Walltexture_ee4d30e9-d319-4914-8c87-7844b7e7a549.jpg?quality=90&v=1734196025&width=1326" alt="Fabric Wallpaper 1">
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?auto=format&fit=crop&w=500&q=80" alt="Fabric Wallpaper 2">
+    </div>
+  </div>
+  
+  <div class="collection-info">
+    <h3>About Fabric Wallpapers</h3>
+    <p>Fabric wallpapers offer a luxurious, textured finish that adds warmth and sophistication to any room. Made from natural or synthetic fibers, they provide excellent sound absorption and create a cozy atmosphere. Perfect for bedrooms, living rooms, and offices where comfort and elegance are priorities.</p>
+  </div>
+</div>
+
+<div id="non-woven-page" class="collection-detail wrap">
+  <button class="back-btn" onclick="goBackToCollections()">← Back to Collections</button>
+  
+  <div class="collection-hero">
+    <div class="collection-hero-content">
+      <h2>Non-Woven Collection</h2>
+      <p>Timeless patterns with rich historical appeal</p>
+    </div>
+  </div>
+  
+  <div class="admin-upload-area" onclick="document.getElementById('non-woven-upload').click()">
+    <div class="upload-icon">📤</div>
+    <div class="upload-text">Click to upload images for this collection</div>
+    <input type="file" id="non-woven-upload" class="image-upload" multiple accept="image/*" onchange="handleImageUpload(this, 'non-woven')">
+  </div>
+  
+  <div class="collection-gallery" id="non-woven-gallery">
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1618220252344-8ec99ec624b1?auto=format&fit=crop&w=600&q=80" alt="Non-Woven Wallpaper 1">
+    </div>
+  </div>
+  
+  <div class="collection-info">
+    <h3>About Non-Woven Wallpapers</h3>
+    <p>Non-woven wallpapers are breathable, eco-friendly, and easy to install and remove. They're made from a blend of natural and synthetic fibers, creating a durable material that's resistant to mold and mildew. Their classic patterns and textures work well in traditional and contemporary interiors alike.</p>
+  </div>
+</div>
+
+<div id="flora-page" class="collection-detail wrap">
+  <button class="back-btn" onclick="goBackToCollections()">← Back to Collections</button>
+  
+  <div class="collection-hero">
+    <div class="collection-hero-content">
+      <h2>Flora Collection</h2>
+      <p>Nature-inspired designs with artistic detailing</p>
+    </div>
+  </div>
+  
+  <div class="admin-upload-area" onclick="document.getElementById('flora-upload').click()">
+    <div class="upload-icon">📤</div>
+    <div class="upload-text">Click to upload images for this collection</div>
+    <input type="file" id="flora-upload" class="image-upload" multiple accept="image/*" onchange="handleImageUpload(this, 'flora')">
+  </div>
+  
+  <div class="collection-gallery" id="flora-gallery">
+    <div class="gallery-item">
+      <img src="https://s3.ap-south-1.amazonaws.com/images.woodenstreet.de/image/data/Blog%20images/2ndsept/4.jpg" alt="Flora Wallpaper 1">
+    </div>
+  </div>
+  
+  <div class="collection-info">
+    <h3>About Flora Wallpapers</h3>
+    <p>Flora wallpapers bring the beauty of nature indoors with botanical prints, floral patterns, and leaf motifs. These designs range from subtle, minimalist patterns to bold, statement-making murals. Perfect for creating a fresh, vibrant atmosphere in any room, especially bedrooms, sunrooms, and living areas.</p>
+  </div>
+</div>
+
+<div id="paper-page" class="collection-detail wrap">
+  <button class="back-btn" onclick="goBackToCollections()">← Back to Collections</button>
+  
+  <div class="collection-hero">
+    <div class="collection-hero-content">
+      <h2>Paper Collection</h2>
+      <p>Eco-friendly and breathable material for a natural look</p>
+    </div>
+  </div>
+  
+  <div class="admin-upload-area" onclick="document.getElementById('paper-upload').click()">
+    <div class="upload-icon">📤</div>
+    <div class="upload-text">Click to upload images for this collection</div>
+    <input type="file" id="paper-upload" class="image-upload" multiple accept="image/*" onchange="handleImageUpload(this, 'paper')">
+  </div>
+  
+  <div class="collection-gallery" id="paper-gallery">
+    <div class="gallery-item">
+      <img src="https://wallblush.com/cdn/shop/files/Doon_tJudgeMeWallpaperWhiteandFauxGoldGeometric.png?v=1762443231&width=2048" alt="Paper Wallpaper 1">
+    </div>
+  </div>
+  
+  <div class="collection-info">
+    <h3>About Paper Wallpapers</h3>
+    <p>Paper wallpapers are the traditional choice, known for their natural look and breathability. Made from renewable resources, they're an eco-friendly option that works well in most rooms. While not as durable as vinyl, they offer a classic, matte finish that's perfect for creating a warm, inviting atmosphere.</p>
+  </div>
+</div>
+
+<div id="textured-page" class="collection-detail wrap">
+  <button class="back-btn" onclick="goBackToCollections()">← Back to Collections</button>
+  
+  <div class="collection-hero">
+    <div class="collection-hero-content">
+      <h2>Textured Collection</h2>
+      <p>Bold statements with artistic expression and depth</p>
+    </div>
+  </div>
+  
+  <div class="admin-upload-area" onclick="document.getElementById('textured-upload').click()">
+    <div class="upload-icon">📤</div>
+    <div class="upload-text">Click to upload images for this collection</div>
+    <input type="file" id="textured-upload" class="image-upload" multiple accept="image/*" onchange="handleImageUpload(this, 'textured')">
+  </div>
+  
+  <div class="collection-gallery" id="textured-gallery">
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?auto=format&fit=crop&w=600&q=80" alt="Textured Wallpaper 1">
+    </div>
+  </div>
+  
+  <div class="collection-info">
+    <h3>About Textured Wallpapers</h3>
+    <p>Textured wallpapers add dimension and visual interest to walls with embossed patterns, 3D effects, and tactile surfaces. They can mimic materials like brick, stone, or fabric, creating depth without the weight or cost of the real thing. Ideal for creating feature walls and adding character to minimalist spaces.</p>
+  </div>
+</div>
 
 <div class="float-wrap" role="navigation" aria-label="Quick actions">
   <a class="fab wa" href="https://wa.me/917973890562" title="Chat on WhatsApp" aria-label="WhatsApp">💬</a>
@@ -1076,7 +1537,7 @@
 <div class="admin-login-btn" id="adminLoginBtn" title="Owner Login">🔒</div>
 
 <script>
-// All JavaScript remains the same as previous code
+// Fade-up animation
 const faders = document.querySelectorAll('.fade-up');
 const revealOnScroll = new IntersectionObserver(entries => {
   entries.forEach(entry => {
@@ -1085,6 +1546,7 @@ const revealOnScroll = new IntersectionObserver(entries => {
 }, {threshold: 0.12});
 faders.forEach(f => revealOnScroll.observe(f));
 
+// Quick booking form
 const quickBook = document.getElementById('quickBook');
 const bookMsg = document.getElementById('bookMsg');
 if (quickBook) {
@@ -1095,6 +1557,7 @@ if (quickBook) {
   });
 }
 
+// Contact form
 const contactForm = document.getElementById('contactForm');
 const contactMsg = document.getElementById('contactMsg');
 if (contactForm) {
@@ -1105,12 +1568,15 @@ if (contactForm) {
   });
 }
 
+// Set current year in footer
 document.getElementById('year').textContent = new Date().getFullYear();
 
+// Smooth scrolling for keyboard navigation
 document.body.addEventListener('keydown', (e) => {
   if (e.key === 'Tab') document.documentElement.style.scrollBehavior = 'smooth';
 });
 
+// Collection navigation
 const tiles = document.querySelectorAll('.tile');
 const mainContent = document.getElementById('main-content');
 const collectionPages = document.querySelectorAll('.collection-detail');
@@ -1129,6 +1595,7 @@ tiles.forEach(tile => {
   });
 });
 
+// Back to collections function
 function goBackToCollections() {
   collectionPages.forEach(page => {
     page.style.display = 'none';
@@ -1138,6 +1605,7 @@ function goBackToCollections() {
   history.pushState({}, '', window.location.pathname);
 }
 
+// Handle image upload for admin
 function handleImageUpload(input, collectionId) {
   const files = input.files;
   const gallery = document.getElementById(`${collectionId}-gallery`);
@@ -1164,6 +1632,7 @@ function handleImageUpload(input, collectionId) {
   input.value = '';
 }
 
+// Admin login functionality
 let isOwner = false;
 
 document.getElementById('adminLoginBtn').addEventListener('click', function() {
@@ -1174,6 +1643,7 @@ document.getElementById('adminLoginBtn').addEventListener('click', function() {
       this.innerHTML = '🔓';
       this.title = 'Owner Mode Active';
       showUploadAreas();
+      showProductUploadForm();
       alert('Owner mode activated. Upload areas are now visible.');
     } else {
       alert('Incorrect password.');
@@ -1183,6 +1653,7 @@ document.getElementById('adminLoginBtn').addEventListener('click', function() {
     this.innerHTML = '🔒';
     this.title = 'Owner Login';
     hideUploadAreas();
+    hideProductUploadForm();
     alert('Owner mode deactivated.');
   }
 });
@@ -1201,6 +1672,15 @@ function hideUploadAreas() {
   });
 }
 
+function showProductUploadForm() {
+  document.getElementById('productUploadForm').style.display = 'block';
+}
+
+function hideProductUploadForm() {
+  document.getElementById('productUploadForm').style.display = 'none';
+}
+
+// Handle browser back/forward buttons
 window.addEventListener('popstate', (event) => {
   if (event.state && event.state.collection) {
     mainContent.style.display = 'none';
@@ -1216,6 +1696,7 @@ window.addEventListener('popstate', (event) => {
   }
 });
 
+// Handle direct URL access to collections
 window.addEventListener('DOMContentLoaded', () => {
   const hash = window.location.hash.substring(1);
   if (hash) {
@@ -1225,6 +1706,205 @@ window.addEventListener('DOMContentLoaded', () => {
       collectionPage.style.display = 'block';
     }
   }
+});
+
+// Wall Decor Accessories System
+let products = [];
+
+// Sample initial products
+const initialProducts = [
+  {
+    id: 1,
+    name: "Abstract Canvas Art",
+    description: "Modern abstract painting on premium canvas, perfect for contemporary interiors.",
+    price: "₹2,499",
+    category: "wall-art",
+    image: "https://images.unsplash.com/photo-1578321272175-bb6a6d1c31e9?auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    id: 2,
+    name: "Gold Framed Mirror",
+    description: "Elegant mirror with gold leaf frame, adds luxury and dimension to any space.",
+    price: "₹3,799",
+    category: "mirrors",
+    image: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    id: 3,
+    name: "Floating Wood Shelves",
+    description: "Set of 3 floating shelves in natural wood finish, perfect for displaying decor items.",
+    price: "₹1,899",
+    category: "shelves",
+    image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    id: 4,
+    name: "Minimalist Wall Clock",
+    description: "Sleek minimalist design with silent movement, perfect for modern interiors.",
+    price: "₹1,299",
+    category: "clocks",
+    image: "https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    id: 5,
+    name: "Brass Wall Sconces",
+    description: "Pair of elegant brass wall sconces with dimmable LED lighting.",
+    price: "₹4,299",
+    category: "lighting",
+    image: "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    id: 6,
+    name: "Metal Wall Sculpture",
+    description: "Handcrafted metal wall sculpture with geometric patterns and gold finish.",
+    price: "₹3,499",
+    category: "wall-art",
+    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    id: 7,
+    name: "Corner Display Shelves",
+    description: "Set of 2 triangular corner shelves, perfect for utilizing empty corner spaces.",
+    price: "₹1,599",
+    category: "shelves",
+    image: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=500&q=80"
+  },
+  {
+    id: 8,
+    name: "Macrame Wall Planters",
+    description: "Set of 3 handmade macrame plant hangers with ceramic pots for indoor plants.",
+    price: "₹2,199",
+    category: "decor",
+    image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=500&q=80"
+  }
+];
+
+// Initialize products from localStorage or use initial products
+function initializeProducts() {
+  const savedProducts = localStorage.getItem('amjoWallsProducts');
+  if (savedProducts) {
+    products = JSON.parse(savedProducts);
+  } else {
+    products = initialProducts;
+    localStorage.setItem('amjoWallsProducts', JSON.stringify(products));
+  }
+  renderProducts();
+}
+
+// Render products to the grid
+function renderProducts(filterCategory = 'all') {
+  const grid = document.getElementById('accessories-grid');
+  grid.innerHTML = '';
+  
+  const filteredProducts = filterCategory === 'all' 
+    ? products 
+    : products.filter(product => product.category === filterCategory);
+  
+  filteredProducts.forEach(product => {
+    const productElement = document.createElement('div');
+    productElement.className = 'accessory-item';
+    productElement.setAttribute('data-category', product.category);
+    
+    productElement.innerHTML = `
+      ${isOwner ? `<button class="delete-product-btn" onclick="deleteProduct(${product.id})" title="Delete Product">×</button>` : ''}
+      <img src="${product.image}" alt="${product.name}" class="accessory-image">
+      <div class="accessory-details">
+        <h4 class="accessory-name">${product.name}</h4>
+        <p class="accessory-description">${product.description}</p>
+        <p class="accessory-price">${product.price}</p>
+        <a href="https://wa.me/917973890562?text=Hi%20Amjo%20Walls,%20I'm%20interested%20in%20${encodeURIComponent(product.name)}" class="accessory-cta">Enquire Now</a>
+      </div>
+    `;
+    
+    grid.appendChild(productElement);
+  });
+}
+
+// Add new product
+document.getElementById('newProductForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const name = document.getElementById('productName').value;
+  const price = document.getElementById('productPrice').value;
+  const description = document.getElementById('productDescription').value;
+  const category = document.getElementById('productCategory').value;
+  const imageFile = document.getElementById('productImage').files[0];
+  
+  if (!imageFile) {
+    alert('Please select an image for the product');
+    return;
+  }
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const newProduct = {
+      id: Date.now(), // Simple ID generation
+      name,
+      price,
+      description,
+      category,
+      image: e.target.result
+    };
+    
+    products.push(newProduct);
+    localStorage.setItem('amjoWallsProducts', JSON.stringify(products));
+    renderProducts();
+    document.getElementById('newProductForm').reset();
+    document.getElementById('imagePreview').style.display = 'none';
+    alert('Product added successfully!');
+  };
+  
+  reader.readAsDataURL(imageFile);
+});
+
+// Delete product
+function deleteProduct(id) {
+  if (confirm('Are you sure you want to delete this product?')) {
+    products = products.filter(product => product.id !== id);
+    localStorage.setItem('amjoWallsProducts', JSON.stringify(products));
+    renderProducts();
+  }
+}
+
+// Image preview
+document.getElementById('productImage').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const preview = document.getElementById('imagePreview');
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// Clear form
+document.getElementById('clearForm').addEventListener('click', function() {
+  document.getElementById('newProductForm').reset();
+  document.getElementById('imagePreview').style.display = 'none';
+});
+
+// Category filtering
+const accessoryCategories = document.querySelectorAll('.accessory-category');
+
+accessoryCategories.forEach(category => {
+  category.addEventListener('click', () => {
+    // Remove active class from all categories
+    accessoryCategories.forEach(cat => cat.classList.remove('active'));
+    
+    // Add active class to clicked category
+    category.classList.add('active');
+    
+    const selectedCategory = category.getAttribute('data-category');
+    renderProducts(selectedCategory);
+  });
+});
+
+// Initialize the products when page loads
+document.addEventListener('DOMContentLoaded', function() {
+  initializeProducts();
 });
 </script>
 
