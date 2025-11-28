@@ -969,6 +969,42 @@
     max-width: 80%;
   }
   
+  /* Mobile Navigation Styles */
+  .mobile-nav {
+    position: fixed;
+    right: 12px;
+    left: 12px;
+    top: 64px;
+    z-index: 9999;
+    background: linear-gradient(180deg, rgba(18,18,19,0.98), rgba(12,12,13,0.98));
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.03);
+    transform-origin: top right;
+    transition: opacity .18s ease, transform .18s ease;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-6px) scale(.99);
+  }
+  .mobile-nav.open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
+  .mobile-nav a {
+    display: block;
+    padding: 12px 10px;
+    color: var(--muted);
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 8px;
+  }
+  .mobile-nav a:hover {
+    background: rgba(255,255,255,0.02);
+    color: var(--accent);
+  }
+  
   @media(max-width:1024px){
     .grid{grid-template-columns:repeat(2,1fr)}
     .visit-grid{grid-template-columns:1fr}
@@ -1010,33 +1046,6 @@
     .brand .sub{display:none}
     nav.primary{display:none}
     .menu-btn{display:inline-flex}
-    .mobile-nav {
-      position:fixed;
-      right:12px;
-      left:12px;
-      top:64px;
-      z-index:9999;
-      background:linear-gradient(180deg, rgba(18,18,19,0.98), rgba(12,12,13,0.98));
-      border-radius:12px;
-      padding:12px;
-      box-shadow:0 30px 60px rgba(0,0,0,0.6);
-      border:1px solid rgba(255,255,255,0.03);
-      transform-origin:top right;
-      transition:opacity .18s ease, transform .18s ease;
-      opacity:0;
-      pointer-events:none;
-      transform:translateY(-6px) scale(.99);
-    }
-    .mobile-nav.open{opacity:1;pointer-events:auto;transform:none}
-    .mobile-nav a{
-      display:block;
-      padding:12px 10px;
-      color:var(--muted);
-      font-weight:700;
-      text-decoration:none;
-      border-radius:8px;
-    }
-    .mobile-nav a:hover{background:rgba(255,255,255,0.02);color:var(--accent)}
     .hero{height:56vh;min-height:360px;border-radius:12px;margin:18px 12px}
     .hero h2{font-size:26px}
     .hero p{font-size:15px}
@@ -1138,6 +1147,18 @@
         <rect y="12" width="20" height="2" rx="1" fill="currentColor"></rect>
       </svg>
     </button>
+  </div>
+  
+  <!-- Mobile Navigation Menu -->
+  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+    <a href="#home">Home</a>
+    <a href="#collections">Collections</a>
+    <a href="#accessories">Wall Decor</a>
+    <a href="#process">Process</a>
+    <a href="#visit">Home Visit</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#contact">Contact</a>
+  </nav>
 </header>
 
 <div id="main-content">
@@ -1669,6 +1690,36 @@
 </div>
 
 <script>
+// Mobile Navigation Toggle
+const menuBtn = document.getElementById('menuBtn');
+const mobileNav = document.getElementById('mobileNav');
+
+menuBtn.addEventListener('click', function() {
+  const isExpanded = menuBtn.getAttribute('aria-expanded') === 'true';
+  menuBtn.setAttribute('aria-expanded', !isExpanded);
+  mobileNav.classList.toggle('open');
+});
+
+// Close mobile menu when clicking on a link
+const mobileNavLinks = mobileNav.querySelectorAll('a');
+mobileNavLinks.forEach(link => {
+  link.addEventListener('click', () => {
+    menuBtn.setAttribute('aria-expanded', 'false');
+    mobileNav.classList.remove('open');
+  });
+});
+
+// Close mobile menu when clicking outside
+document.addEventListener('click', function(event) {
+  const isClickInsideNav = mobileNav.contains(event.target);
+  const isClickOnMenuBtn = menuBtn.contains(event.target);
+  
+  if (!isClickInsideNav && !isClickOnMenuBtn && mobileNav.classList.contains('open')) {
+    menuBtn.setAttribute('aria-expanded', 'false');
+    mobileNav.classList.remove('open');
+  }
+});
+
 // Fade-up animation
 const faders = document.querySelectorAll('.fade-up');
 const revealOnScroll = new IntersectionObserver(entries => {
