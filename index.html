@@ -14,6 +14,8 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
+    -webkit-touch-callout: none; /* Added to prevent callout on iOS */
   }
   
   /* Allow text selection only for inputs and textareas */
@@ -172,6 +174,7 @@
     transition:transform .25s ease, box-shadow .25s ease;
     border:1px solid rgba(255,255,255,0.02);
     position:relative;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
   }
   .tile::before {
     content: '';
@@ -188,7 +191,14 @@
     opacity: 1;
   }
   .tile:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(139, 92, 246, 0.2)}
-  .tile img{width:100%;height:230px;object-fit:cover;display:block}
+  .tile img{
+    width:100%;
+    height:230px;
+    object-fit:cover;
+    display:block;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
+    -webkit-user-drag: none; /* Added to prevent drag on mobile */
+  }
   .tile .meta{padding:12px 14px}
   .tile h4{margin:0;font-size:18px}
   .tile p{margin:6px 0 0;color:var(--muted);font-size:13px}
@@ -306,6 +316,7 @@
     object-fit: cover;
     transition: transform 0.3s ease;
     border: 1px solid rgba(255,255,255,0.05);
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
   }
   .footer-image:hover {
     transform: translateY(-5px);
@@ -323,6 +334,7 @@
     text-decoration:none;
     box-shadow:0 8px 30px rgba(0,0,0,0.6);
     transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
   }
   .fab.wa{background:#25D366}
   .fab.call{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#080606}
@@ -393,6 +405,7 @@
     margin-bottom: 20px;
     transition: all 0.3s ease;
     text-decoration: none;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
   }
   .back-btn:hover {
     background: rgba(255,255,255,0.02);
@@ -411,6 +424,7 @@
     transition: transform 0.3s ease;
     border: 1px solid rgba(255,255,255,0.03);
     position: relative;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
   }
   .gallery-item:hover {
     transform: scale(1.03);
@@ -421,6 +435,8 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
+    -webkit-user-drag: none; /* Added to prevent drag on mobile */
   }
   .collection-info {
     background: rgba(255,255,255,0.02);
@@ -552,6 +568,7 @@
     position: relative;
     cursor: pointer;
     transition: transform 0.3s ease;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
   }
   .featured-item:hover {
     transform: scale(1.05);
@@ -561,6 +578,8 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
+    -webkit-user-drag: none; /* Added to prevent drag on mobile */
   }
   .room-types {
     display: grid;
@@ -575,6 +594,7 @@
     position: relative;
     cursor: pointer;
     transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
   }
   .room-type img {
     width: 100%;
@@ -582,6 +602,8 @@
     object-fit: cover;
     filter: brightness(0.7);
     transition: filter 0.3s ease;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
+    -webkit-user-drag: none; /* Added to prevent drag on mobile */
   }
   .room-type:hover {
     transform: translateY(-5px);
@@ -611,6 +633,7 @@
     border: 2px solid rgba(255,255,255,0.1);
     cursor: pointer;
     transition: transform 0.3s ease;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
   }
   .color-dot:hover {
     transform: scale(1.2);
@@ -634,6 +657,7 @@
     border: 1px solid rgba(255,255,255,0.02);
     position: relative;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
   }
   .accessory-item::before {
     content: '';
@@ -658,6 +682,8 @@
     height: 220px;
     object-fit: cover;
     display: block;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
+    -webkit-user-drag: none; /* Added to prevent drag on mobile */
   }
   .accessory-details {
     padding: 16px;
@@ -694,6 +720,7 @@
     margin-top: 10px;
     transition: all 0.3s ease;
     border: 1px solid rgba(201, 168, 74, 0.2);
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
   }
   .accessory-cta:hover {
     background: rgba(201, 168, 74, 0.2);
@@ -713,6 +740,7 @@
     color: var(--muted);
     transition: all 0.3s ease;
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
   }
   .accessory-category:hover, .accessory-category.active {
     background: rgba(139, 92, 246, 0.1);
@@ -770,6 +798,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
   }
 
   .product-modal-body {
@@ -788,6 +817,8 @@
     height: 500px;
     object-fit: cover;
     display: block;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
+    -webkit-user-drag: none; /* Added to prevent drag on mobile */
   }
 
   .product-thumbnails {
@@ -806,6 +837,8 @@
     border: 2px solid transparent;
     opacity: 0.7;
     transition: all 0.3s ease;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
+    -webkit-user-drag: none; /* Added to prevent drag on mobile */
   }
 
   .product-thumbnail.active,
@@ -882,6 +915,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
   }
 
   .product-action-secondary {
@@ -893,6 +927,7 @@
     font-weight: 600;
     cursor: pointer;
     transition: background 0.3s ease;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
   }
 
   .product-action-secondary:hover {
@@ -922,6 +957,8 @@
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 0 40px rgba(0,0,0,0.8);
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
+    -webkit-user-drag: none; /* Added to prevent drag on mobile */
   }
   .lightbox-close {
     position: absolute;
@@ -934,6 +971,7 @@
     background: none;
     border: none;
     z-index: 1001;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
   }
   .lightbox-nav {
     position: absolute;
@@ -957,6 +995,7 @@
     align-items: center;
     justify-content: center;
     transition: background 0.3s ease;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
   }
   .lightbox-prev:hover, .lightbox-next:hover {
     background: rgba(201,168,74,1);
@@ -999,6 +1038,7 @@
     font-weight: 700;
     text-decoration: none;
     border-radius: 8px;
+    -webkit-tap-highlight-color: transparent; /* Added to fix mobile tap highlight */
   }
   .mobile-nav a:hover {
     background: rgba(255,255,255,0.02);
