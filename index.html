@@ -1743,9 +1743,9 @@
 let scrollPosition = 0;
 let currentSection = '';
 let isNavigatingBack = false;
-let collectionsScrollPosition = 0; // NEW: Store collections section scroll position
+let collectionsScrollPosition = 0;
 
-// Mobile Navigation Toggle - FIXED CLOSING ISSUE
+// Mobile Navigation Toggle
 const menuBtn = document.getElementById('menuBtn');
 const mobileNav = document.getElementById('mobileNav');
 
@@ -1769,18 +1769,11 @@ menuBtn.addEventListener('click', function(e) {
 const mobileNavLinks = mobileNav.querySelectorAll('a');
 mobileNavLinks.forEach(link => {
   link.addEventListener('click', (e) => {
-    // Store current section and scroll position before navigation
-    const targetSection = e.target.getAttribute('href').substring(1);
-    if (targetSection !== currentSection) {
-      scrollPosition = window.scrollY;
-      currentSection = targetSection;
-    }
-    
     closeMobileNav();
   });
 });
 
-// Close mobile menu when clicking outside - FIXED
+// Close mobile menu when clicking outside
 document.addEventListener('click', function(event) {
   const isClickInsideNav = mobileNav.contains(event.target);
   const isClickOnMenuBtn = menuBtn.contains(event.target);
@@ -1824,20 +1817,15 @@ if (contactForm) {
 // Set current year in footer
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// Smooth scrolling for keyboard navigation
-document.body.addEventListener('keydown', (e) => {
-  if (e.key === 'Tab') document.documentElement.style.scrollBehavior = 'smooth';
-});
-
-// Collection navigation - COMPLETELY FIXED BACK NAVIGATION
+// Collection navigation - FIXED BACK NAVIGATION
 const tiles = document.querySelectorAll('.tile');
 const mainContent = document.getElementById('main-content');
 const collectionPages = document.querySelectorAll('.collection-detail');
 
 tiles.forEach(tile => {
   tile.addEventListener('click', () => {
-    // Store current scroll position of collections section before navigating
-    collectionsScrollPosition = window.scrollY; // NEW: Store collections position
+    // Store current scroll position before navigating
+    collectionsScrollPosition = window.scrollY;
     currentSection = 'collections';
     
     const collectionId = tile.getAttribute('data-collection');
@@ -1850,13 +1838,13 @@ tiles.forEach(tile => {
       history.pushState({ 
         collection: collectionId, 
         section: 'collections',
-        collectionsScrollPos: collectionsScrollPosition // NEW: Store in state
+        scrollPos: collectionsScrollPosition 
       }, '', `#${collectionId}`);
     }
   });
 });
 
-// Back to collections function - COMPLETELY FIXED
+// Back to collections function - FIXED
 function goBackToCollections() {
   isNavigatingBack = true;
   collectionPages.forEach(page => {
@@ -1864,7 +1852,7 @@ function goBackToCollections() {
   });
   mainContent.style.display = 'block';
   
-  // Restore scroll position to where user was in collections section
+  // Restore scroll position to where user was before opening collection
   setTimeout(() => {
     if (collectionsScrollPosition > 0) {
       window.scrollTo(0, collectionsScrollPosition);
@@ -1881,7 +1869,7 @@ function goBackToCollections() {
   history.pushState({}, '', window.location.pathname);
 }
 
-// Handle browser back/forward buttons - COMPLETELY FIXED
+// Handle browser back/forward buttons - FIXED
 window.addEventListener('popstate', (event) => {
   isNavigatingBack = true;
   
@@ -1891,11 +1879,10 @@ window.addEventListener('popstate', (event) => {
     if (collectionPage) {
       collectionPage.style.display = 'block';
     }
-    // Restore collections scroll position if available
-    if (event.state.collectionsScrollPos) {
-      collectionsScrollPosition = event.state.collectionsScrollPos;
+    // Restore scroll position if available
+    if (event.state.scrollPos) {
       setTimeout(() => {
-        window.scrollTo(0, event.state.collectionsScrollPos);
+        window.scrollTo(0, event.state.scrollPos);
         isNavigatingBack = false;
       }, 100);
     }
@@ -1916,7 +1903,7 @@ window.addEventListener('popstate', (event) => {
     });
     // Close any open modals
     closeProductModal();
-    // Restore collections scroll position when navigating back from collection
+    // Restore scroll position when navigating back from collection
     setTimeout(() => {
       if (collectionsScrollPosition > 0) {
         window.scrollTo(0, collectionsScrollPosition);
@@ -1969,7 +1956,7 @@ window.addEventListener('scroll', () => {
     if (window.scrollY > 100 && window.scrollY < (document.body.scrollHeight - window.innerHeight - 100)) {
       scrollPosition = window.scrollY;
       
-      // NEW: If we're in the collections section, store the collections position
+      // If we're in the collections section, store the collections position
       const collectionsSection = document.getElementById('collections');
       if (collectionsSection) {
         const rect = collectionsSection.getBoundingClientRect();
