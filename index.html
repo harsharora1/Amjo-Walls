@@ -1739,13 +1739,16 @@
 </div>
 
 <script>
-// Store scroll position and navigation state
-let scrollPosition = 0;
-let currentSection = '';
-let isNavigatingBack = false;
-let collectionsScrollPosition = 0;
+// COMPLETELY REWRITTEN NAVIGATION SYSTEM
+// Simple, reliable scroll position management
 
-// Mobile Navigation Toggle
+// Store scroll positions
+let scrollPositions = {
+  collections: 0,
+  accessories: 0
+};
+
+// Mobile Navigation
 const menuBtn = document.getElementById('menuBtn');
 const mobileNav = document.getElementById('mobileNav');
 
@@ -1768,9 +1771,7 @@ menuBtn.addEventListener('click', function(e) {
 // Close mobile menu when clicking on a link
 const mobileNavLinks = mobileNav.querySelectorAll('a');
 mobileNavLinks.forEach(link => {
-  link.addEventListener('click', (e) => {
-    closeMobileNav();
-  });
+  link.addEventListener('click', closeMobileNav);
 });
 
 // Close mobile menu when clicking outside
@@ -1817,16 +1818,37 @@ if (contactForm) {
 // Set current year in footer
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// Collection navigation - FIXED BACK NAVIGATION
+// Track scroll positions for different sections
+window.addEventListener('scroll', () => {
+  const collectionsSection = document.getElementById('collections');
+  const accessoriesSection = document.getElementById('accessories');
+  
+  if (collectionsSection && isElementInViewport(collectionsSection)) {
+    scrollPositions.collections = window.scrollY;
+  }
+  
+  if (accessoriesSection && isElementInViewport(accessoriesSection)) {
+    scrollPositions.accessories = window.scrollY;
+  }
+});
+
+function isElementInViewport(el) {
+  const rect = el.getBoundingClientRect();
+  return (
+    rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.bottom >= 0
+  );
+}
+
+// Collection navigation - SIMPLIFIED AND FIXED
 const tiles = document.querySelectorAll('.tile');
 const mainContent = document.getElementById('main-content');
 const collectionPages = document.querySelectorAll('.collection-detail');
 
 tiles.forEach(tile => {
   tile.addEventListener('click', () => {
-    // Store current scroll position before navigating
-    collectionsScrollPosition = window.scrollY;
-    currentSection = 'collections';
+    // Store current collections scroll position
+    scrollPositions.collections = window.scrollY;
     
     const collectionId = tile.getAttribute('data-collection');
     const collectionPage = document.getElementById(`${collectionId}-page`);
@@ -1835,10 +1857,11 @@ tiles.forEach(tile => {
       mainContent.style.display = 'none';
       collectionPage.style.display = 'block';
       window.scrollTo(0, 0);
+      
+      // Push to history
       history.pushState({ 
-        collection: collectionId, 
-        section: 'collections',
-        scrollPos: collectionsScrollPosition 
+        type: 'collection',
+        collection: collectionId
       }, '', `#${collectionId}`);
     }
   });
@@ -1846,125 +1869,66 @@ tiles.forEach(tile => {
 
 // Back to collections function - FIXED
 function goBackToCollections() {
-  isNavigatingBack = true;
+  // Hide all collection pages
   collectionPages.forEach(page => {
     page.style.display = 'none';
   });
+  
+  // Show main content
   mainContent.style.display = 'block';
   
-  // Restore scroll position to where user was before opening collection
+  // Restore collections scroll position after a brief delay
   setTimeout(() => {
-    if (collectionsScrollPosition > 0) {
-      window.scrollTo(0, collectionsScrollPosition);
-    } else {
-      // If no stored position, scroll to collections section
-      const collectionsSection = document.getElementById('collections');
-      if (collectionsSection) {
-        collectionsSection.scrollIntoView({ behavior: 'smooth' });
-      }
+    if (scrollPositions.collections > 0) {
+      window.scrollTo(0, scrollPositions.collections);
     }
-    isNavigatingBack = false;
-  }, 100);
+  }, 50);
   
-  history.pushState({}, '', window.location.pathname);
+  // Update history
+  history.pushState({ type: 'main' }, '', window.location.pathname);
 }
 
 // Handle browser back/forward buttons - FIXED
 window.addEventListener('popstate', (event) => {
-  isNavigatingBack = true;
-  
-  if (event.state && event.state.collection) {
+  if (event.state && event.state.type === 'collection') {
+    // Show collection page
     mainContent.style.display = 'none';
     const collectionPage = document.getElementById(`${event.state.collection}-page`);
     if (collectionPage) {
       collectionPage.style.display = 'block';
-    }
-    // Restore scroll position if available
-    if (event.state.scrollPos) {
-      setTimeout(() => {
-        window.scrollTo(0, event.state.scrollPos);
-        isNavigatingBack = false;
-      }, 100);
-    }
-  } else if (event.state && event.state.modal) {
-    // Close product modal when going back
-    closeProductModal();
-    // Restore scroll position
-    if (event.state.scrollPos) {
-      setTimeout(() => {
-        window.scrollTo(0, event.state.scrollPos);
-        isNavigatingBack = false;
-      }, 100);
+      window.scrollTo(0, 0);
     }
   } else {
+    // Show main content and restore appropriate scroll position
     mainContent.style.display = 'block';
     collectionPages.forEach(page => {
       page.style.display = 'none';
     });
-    // Close any open modals
-    closeProductModal();
-    // Restore scroll position when navigating back from collection
+    
+    // Restore scroll position based on current URL hash
     setTimeout(() => {
-      if (collectionsScrollPosition > 0) {
-        window.scrollTo(0, collectionsScrollPosition);
+      const hash = window.location.hash.substring(1);
+      if (hash === 'collections' && scrollPositions.collections > 0) {
+        window.scrollTo(0, scrollPositions.collections);
+      } else if (hash === 'accessories' && scrollPositions.accessories > 0) {
+        window.scrollTo(0, scrollPositions.accessories);
       }
-      isNavigatingBack = false;
-    }, 100);
+    }, 50);
   }
 });
 
 // Handle direct URL access to collections
 window.addEventListener('DOMContentLoaded', () => {
   const hash = window.location.hash.substring(1);
-  if (hash && hash.startsWith('product-')) {
-    // Handle product modal URLs if needed
-  } else if (hash) {
-    const collectionPage = document.getElementById(`${hash}-page`);
-    if (collectionPage) {
-      mainContent.style.display = 'none';
-      collectionPage.style.display = 'block';
-    }
-  }
-});
-
-// Store scroll position when navigating to sections
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    const href = this.getAttribute('href');
-    if (href !== '#' && !href.startsWith('#product-')) {
-      // Store current scroll position before navigating
-      scrollPosition = window.scrollY;
-      currentSection = href.substring(1);
-    }
-  });
-});
-
-// Store scroll position on page load
-window.addEventListener('load', () => {
-  scrollPosition = window.scrollY;
-  // Store initial state
-  history.replaceState({ 
-    section: 'home',
-    scrollPos: scrollPosition 
-  }, '', window.location.pathname);
-});
-
-// Store scroll position on scroll (but not during navigation)
-window.addEventListener('scroll', () => {
-  if (!isNavigatingBack) {
-    // Only store position if not at the very top or bottom
-    if (window.scrollY > 100 && window.scrollY < (document.body.scrollHeight - window.innerHeight - 100)) {
-      scrollPosition = window.scrollY;
-      
-      // If we're in the collections section, store the collections position
-      const collectionsSection = document.getElementById('collections');
-      if (collectionsSection) {
-        const rect = collectionsSection.getBoundingClientRect();
-        if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
-          collectionsScrollPosition = window.scrollY;
-        }
-      }
-    }
+  const collectionPage = document.getElementById(`${hash}-page`);
+  
+  if (collectionPage) {
+    mainContent.style.display = 'none';
+    collectionPage.style.display = 'block';
+    history.replaceState({ 
+      type: 'collection',
+      collection: hash
+    }, '', `#${hash}`);
   }
 });
 
@@ -2186,6 +2150,8 @@ function renderProducts(filterCategory = 'all') {
     productElement.addEventListener('click', (e) => {
       // Don't open modal if clicking the Enquire Now button
       if (!e.target.closest('.accessory-cta')) {
+        // Store accessories scroll position before opening modal
+        scrollPositions.accessories = window.scrollY;
         openProductModal(product);
       }
     });
@@ -2215,10 +2181,6 @@ const productModal = document.getElementById('product-modal');
 const productModalClose = document.getElementById('productModalClose');
 
 function openProductModal(product) {
-  // Store current scroll position before opening modal
-  scrollPosition = window.scrollY;
-  currentSection = 'accessories';
-  
   // Set main product image
   document.getElementById('product-main-image').src = product.images[0];
   document.getElementById('product-main-image').alt = product.name;
@@ -2278,9 +2240,8 @@ function openProductModal(product) {
   document.body.style.overflow = 'hidden';
   
   history.pushState({ 
-    modal: 'product', 
-    section: currentSection,
-    scrollPos: scrollPosition 
+    type: 'modal',
+    productId: product.id
   }, '', `#product-${product.id}`);
 }
 
@@ -2288,11 +2249,11 @@ function closeProductModal() {
   productModal.classList.remove('active');
   document.body.style.overflow = '';
   
-  // Restore scroll position when closing modal
-  if (scrollPosition > 0) {
+  // Restore accessories scroll position when closing modal
+  if (scrollPositions.accessories > 0) {
     setTimeout(() => {
-      window.scrollTo(0, scrollPosition);
-    }, 100);
+      window.scrollTo(0, scrollPositions.accessories);
+    }, 50);
   }
 }
 
@@ -2307,6 +2268,13 @@ productModal.addEventListener('click', (e) => {
 // Close modal with Escape key
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && productModal.classList.contains('active')) {
+    closeProductModal();
+  }
+});
+
+// Handle modal in popstate
+window.addEventListener('popstate', (event) => {
+  if (productModal.classList.contains('active')) {
     closeProductModal();
   }
 });
