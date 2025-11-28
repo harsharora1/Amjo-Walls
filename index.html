@@ -1840,7 +1840,7 @@ function isElementInViewport(el) {
   );
 }
 
-// Collection navigation - SIMPLIFIED AND FIXED
+// Collection navigation - FIXED VERSION
 const tiles = document.querySelectorAll('.tile');
 const mainContent = document.getElementById('main-content');
 const collectionPages = document.querySelectorAll('.collection-detail');
@@ -1861,7 +1861,8 @@ tiles.forEach(tile => {
       // Push to history
       history.pushState({ 
         type: 'collection',
-        collection: collectionId
+        collection: collectionId,
+        scrollPosition: scrollPositions.collections
       }, '', `#${collectionId}`);
     }
   });
@@ -1869,6 +1870,10 @@ tiles.forEach(tile => {
 
 // Back to collections function - FIXED
 function goBackToCollections() {
+  // Get the stored scroll position from history state
+  const state = history.state;
+  const scrollPosition = state ? state.scrollPosition : scrollPositions.collections;
+  
   // Hide all collection pages
   collectionPages.forEach(page => {
     page.style.display = 'none';
@@ -1877,12 +1882,12 @@ function goBackToCollections() {
   // Show main content
   mainContent.style.display = 'block';
   
-  // Restore collections scroll position after a brief delay
+  // Restore collections scroll position after DOM update
   setTimeout(() => {
-    if (scrollPositions.collections > 0) {
-      window.scrollTo(0, scrollPositions.collections);
+    if (scrollPosition > 0) {
+      window.scrollTo(0, scrollPosition);
     }
-  }, 50);
+  }, 10);
   
   // Update history
   history.pushState({ type: 'main' }, '', window.location.pathname);
@@ -1912,8 +1917,11 @@ window.addEventListener('popstate', (event) => {
         window.scrollTo(0, scrollPositions.collections);
       } else if (hash === 'accessories' && scrollPositions.accessories > 0) {
         window.scrollTo(0, scrollPositions.accessories);
+      } else if (event.state && event.state.scrollPosition) {
+        // Use scroll position from state if available
+        window.scrollTo(0, event.state.scrollPosition);
       }
-    }, 50);
+    }, 10);
   }
 });
 
@@ -1927,7 +1935,8 @@ window.addEventListener('DOMContentLoaded', () => {
     collectionPage.style.display = 'block';
     history.replaceState({ 
       type: 'collection',
-      collection: hash
+      collection: hash,
+      scrollPosition: scrollPositions.collections
     }, '', `#${hash}`);
   }
 });
@@ -2253,7 +2262,7 @@ function closeProductModal() {
   if (scrollPositions.accessories > 0) {
     setTimeout(() => {
       window.scrollTo(0, scrollPositions.accessories);
-    }, 50);
+    }, 10);
   }
 }
 
