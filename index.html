@@ -1083,7 +1083,8 @@
     .nav{padding:8px 14px;gap:10px}
     .logo-mark{width:40px;height:40px;font-size:14px;border-radius:9px}
     .brand h1{font-size:16px}
-    .brand .sub{display:none}
+    /* FIX: Show the tagline on mobile with smaller font size */
+    .brand .sub{display:block; font-size:10px; margin-top:1px}
     nav.primary{display:none}
     .menu-btn{display:inline-flex}
     .hero{height:56vh;min-height:360px;border-radius:12px;margin:18px 12px}
@@ -1730,6 +1731,9 @@
 </div>
 
 <script>
+// Store scroll position before navigating to collection pages
+let scrollPosition = 0;
+
 // Mobile Navigation Toggle
 const menuBtn = document.getElementById('menuBtn');
 const mobileNav = document.getElementById('mobileNav');
@@ -1806,6 +1810,9 @@ const collectionPages = document.querySelectorAll('.collection-detail');
 
 tiles.forEach(tile => {
   tile.addEventListener('click', () => {
+    // Store current scroll position before navigating
+    scrollPosition = window.scrollY;
+    
     const collectionId = tile.getAttribute('data-collection');
     const collectionPage = document.getElementById(`${collectionId}-page`);
     
@@ -1824,7 +1831,10 @@ function goBackToCollections() {
     page.style.display = 'none';
   });
   mainContent.style.display = 'block';
-  document.getElementById('collections').scrollIntoView({ behavior: 'smooth' });
+  
+  // Restore scroll position to where user was before opening collection
+  window.scrollTo(0, scrollPosition);
+  
   history.pushState({}, '', window.location.pathname);
 }
 
@@ -1841,6 +1851,8 @@ window.addEventListener('popstate', (event) => {
     collectionPages.forEach(page => {
       page.style.display = 'none';
     });
+    // Restore scroll position when navigating back from collection
+    window.scrollTo(0, scrollPosition);
   }
 });
 
