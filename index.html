@@ -1751,6 +1751,9 @@ let scrollPositions = {
 // Track if lightbox is open
 let isLightboxOpen = false;
 
+// Track current collection
+let currentCollection = null;
+
 // Mobile Navigation
 const menuBtn = document.getElementById('menuBtn');
 const mobileNav = document.getElementById('mobileNav');
@@ -1860,6 +1863,7 @@ tiles.forEach(tile => {
       mainContent.style.display = 'none';
       collectionPage.style.display = 'block';
       window.scrollTo(0, 0);
+      currentCollection = collectionId;
       
       // Push to history
       history.pushState({ 
@@ -1890,10 +1894,11 @@ function goBackToCollections() {
     if (scrollPosition > 0) {
       window.scrollTo(0, scrollPosition);
     }
-  }, 10);
+  }, 50);
   
   // Update history
   history.pushState({ type: 'main' }, '', window.location.pathname);
+  currentCollection = null;
 }
 
 // Handle browser back/forward buttons - FIXED
@@ -1913,6 +1918,7 @@ window.addEventListener('popstate', (event) => {
     if (collectionPage) {
       collectionPage.style.display = 'block';
       window.scrollTo(0, 0);
+      currentCollection = event.state.collection;
     }
   } else {
     // Show main content and restore appropriate scroll position
@@ -1932,7 +1938,9 @@ window.addEventListener('popstate', (event) => {
         // Use scroll position from state if available
         window.scrollTo(0, event.state.scrollPosition);
       }
-    }, 10);
+    }, 50);
+    
+    currentCollection = null;
   }
 });
 
@@ -1944,6 +1952,7 @@ window.addEventListener('DOMContentLoaded', () => {
   if (collectionPage) {
     mainContent.style.display = 'none';
     collectionPage.style.display = 'block';
+    currentCollection = hash;
     history.replaceState({ 
       type: 'collection',
       collection: hash,
