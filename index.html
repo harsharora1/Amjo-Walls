@@ -1748,6 +1748,9 @@ let scrollPositions = {
   accessories: 0
 };
 
+// Track if lightbox is open
+let isLightboxOpen = false;
+
 // Mobile Navigation
 const menuBtn = document.getElementById('menuBtn');
 const mobileNav = document.getElementById('mobileNav');
@@ -1895,6 +1898,14 @@ function goBackToCollections() {
 
 // Handle browser back/forward buttons - FIXED
 window.addEventListener('popstate', (event) => {
+  // Check if lightbox is open and close it first
+  if (isLightboxOpen) {
+    closeLightbox();
+    // Prevent further processing if lightbox was open
+    history.pushState(null, '', window.location.href);
+    return;
+  }
+  
   if (event.state && event.state.type === 'collection') {
     // Show collection page
     mainContent.style.display = 'none';
@@ -2288,7 +2299,7 @@ window.addEventListener('popstate', (event) => {
   }
 });
 
-// Lightbox functionality for Featured Wallpapers and Room Types
+// Lightbox functionality for Featured Wallpapers, Room Types, and Collection Galleries
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightboxImg');
 const lightboxCaption = document.getElementById('lightboxCaption');
@@ -2305,6 +2316,10 @@ function openLightbox(images, index) {
   updateLightbox();
   lightbox.classList.add('active');
   document.body.style.overflow = 'hidden';
+  isLightboxOpen = true;
+  
+  // Add history state for lightbox
+  history.pushState({ type: 'lightbox' }, '');
 }
 
 function updateLightbox() {
@@ -2321,6 +2336,7 @@ function updateLightbox() {
 function closeLightbox() {
   lightbox.classList.remove('active');
   document.body.style.overflow = '';
+  isLightboxOpen = false;
 }
 
 lightboxClose.addEventListener('click', closeLightbox);
@@ -2383,9 +2399,27 @@ roomTypes.forEach(item => {
   });
 });
 
-// Initialize the products when page loads
+// Add click events to Collection Gallery Items
+function initializeCollectionGalleries() {
+  const collectionGalleries = document.querySelectorAll('.collection-gallery');
+  
+  collectionGalleries.forEach(gallery => {
+    const galleryItems = gallery.querySelectorAll('.gallery-item');
+    
+    galleryItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const images = Array.from(galleryItems).map(el => el.querySelector('img'));
+        const index = Array.from(galleryItems).indexOf(item);
+        openLightbox(images, index);
+      });
+    });
+  });
+}
+
+// Initialize the products and collection galleries when page loads
 document.addEventListener('DOMContentLoaded', function() {
   initializeProducts();
+  initializeCollectionGalleries();
 });
 </script>
 
