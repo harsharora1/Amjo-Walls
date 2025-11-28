@@ -8,6 +8,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
+  /* Prevent text selection */
+  * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  /* Allow text selection only for inputs and textareas */
+  input, textarea {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+
   :root{
     --bg:#0f0f10;
     --card:#101214;
@@ -617,6 +633,7 @@
     transition: all 0.3s ease;
     border: 1px solid rgba(255,255,255,0.02);
     position: relative;
+    cursor: pointer;
   }
   .accessory-item::before {
     content: '';
@@ -709,121 +726,247 @@
     flex-wrap: wrap;
     gap: 15px;
   }
-  
-  /* Product Upload Form Styles */
-  .product-upload-form {
+
+  /* Product Detail Modal */
+  .product-modal {
     display: none;
-    background: rgba(255,255,255,0.02);
-    border-radius: 12px;
-    padding: 24px;
-    margin: 20px 0;
-    border: 1px solid rgba(255,255,255,0.03);
-    position: relative;
-  }
-  .product-upload-form::before {
-    content: '';
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--purple), var(--teal), var(--accent));
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 1000;
+    overflow-y: auto;
   }
-  .form-group {
-    margin-bottom: 20px;
-  }
-  .form-group label {
+
+  .product-modal.active {
     display: block;
-    margin-bottom: 8px;
-    color: var(--muted);
-    font-weight: 600;
   }
-  .form-group input, .form-group select, .form-group textarea {
-    width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid rgba(255,255,255,0.04);
-    background: transparent;
-    color: #eee;
-    transition: all 0.3s ease;
+
+  .product-modal-content {
+    background: var(--bg);
+    margin: 40px auto;
+    max-width: 1000px;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.05);
   }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-    outline: none;
-    border-color: var(--teal);
-    box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.1);
-  }
-  .form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-  }
-  .image-preview {
-    width: 100%;
-    max-height: 200px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-top: 10px;
-    display: none;
-  }
-  .delete-btn {
-    background: rgba(244, 63, 94, 0.1);
-    color: var(--rose);
-    border: 1px solid rgba(244, 63, 94, 0.2);
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 8px;
-  }
-  .delete-btn:hover {
-    background: rgba(244, 63, 94, 0.2);
-    transform: translateY(-2px);
-  }
-  .delete-product-btn {
+
+  .product-modal-close {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(244, 63, 94, 0.8);
+    top: 15px;
+    right: 15px;
+    background: rgba(0,0,0,0.7);
     color: white;
     border: none;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 10;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .product-modal-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+
+  .product-gallery {
+    position: relative;
+    background: var(--card);
+  }
+
+  .product-main-image {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .product-thumbnails {
+    display: flex;
+    gap: 8px;
+    padding: 15px;
+    overflow-x: auto;
+  }
+
+  .product-thumbnail {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
     cursor: pointer;
-    opacity: 0;
+    border: 2px solid transparent;
+    opacity: 0.7;
     transition: all 0.3s ease;
-    z-index: 10;
   }
-  .accessory-item:hover .delete-product-btn {
+
+  .product-thumbnail.active,
+  .product-thumbnail:hover {
     opacity: 1;
+    border-color: var(--accent);
   }
-  .delete-product-btn:hover {
-    background: rgba(244, 63, 94, 1);
-    transform: scale(1.1);
+
+  .product-details {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
-  
-  /* Data Management Styles */
-  .data-management {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255,255,255,0.1);
+
+  .product-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--accent);
+    margin: 0 0 10px 0;
   }
-  .data-management h4 {
+
+  .product-price {
+    font-size: 24px;
+    color: var(--accent);
+    font-weight: 700;
+    margin: 0 0 20px 0;
+  }
+
+  .product-full-description {
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex-grow: 1;
+  }
+
+  .product-features {
+    margin-bottom: 25px;
+  }
+
+  .product-features h4 {
     color: var(--accent);
     margin-bottom: 10px;
   }
-  .data-buttons {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+
+  .product-features ul {
+    color: var(--muted);
+    padding-left: 20px;
+    margin: 0;
   }
-  .import-label {
-    display: inline-block;
+
+  .product-features li {
+    margin-bottom: 5px;
+  }
+
+  .product-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: auto;
+  }
+
+  .product-action-primary {
+    flex: 1;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    color: #080808;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 700;
     cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .product-action-secondary {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid rgba(201,168,74,0.3);
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .product-action-secondary:hover {
+    background: rgba(201,168,74,0.1);
+  }
+
+  /* Lightbox Styles */
+  .lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .lightbox.active {
+    display: flex;
+  }
+  .lightbox-img {
+    max-width: 90%;
+    max-height: 80%;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.8);
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    background: none;
+    border: none;
+    z-index: 1001;
+  }
+  .lightbox-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    transform: translateY(-50%);
+  }
+  .lightbox-prev, .lightbox-next {
+    background: rgba(201,168,74,0.7);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+  }
+  .lightbox-prev:hover, .lightbox-next:hover {
+    background: rgba(201,168,74,1);
+  }
+  .lightbox-caption {
+    color: white;
+    margin-top: 15px;
+    font-size: 18px;
+    text-align: center;
+    max-width: 80%;
   }
   
   @media(max-width:1024px){
@@ -850,8 +993,11 @@
     .accessories-grid {
       grid-template-columns: repeat(2, 1fr);
     }
-    .form-row {
+    .product-modal-body {
       grid-template-columns: 1fr;
+    }
+    .product-main-image {
+      height: 400px;
     }
   }
   @media(max-width:900px){
@@ -943,11 +1089,24 @@
       flex-direction: column;
       align-items: flex-start;
     }
-    .delete-product-btn {
-      opacity: 1;
+    .product-modal-content {
+      margin: 20px;
     }
-    .data-buttons {
+    .product-details {
+      padding: 20px;
+    }
+    .product-title {
+      font-size: 24px;
+    }
+    .product-actions {
       flex-direction: column;
+    }
+    .product-main-image {
+      height: 300px;
+    }
+    .product-thumbnail {
+      width: 60px;
+      height: 60px;
     }
   }
 </style>
@@ -998,16 +1157,16 @@
       <h3 class="section-title">Featured Wallpapers</h3>
       <p class="lead">Handpicked designs that transform ordinary walls into extraordinary statements</p>
       <div class="featured-wallpapers">
-        <div class="featured-item">
+        <div class="featured-item" data-index="0">
           <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80" alt="Featured 1">
         </div>
-        <div class="featured-item">
+        <div class="featured-item" data-index="1">
           <img src="https://images.unsplash.com/photo-1618220252344-8ec99ec624b1?auto=format&fit=crop&w=500&q=80" alt="Featured 2">
         </div>
-        <div class="featured-item">
+        <div class="featured-item" data-index="2">
           <img src="https://eurotex.in/cdn/shop/files/37204.jpg?v=1709638934&width=1946" alt="Featured 3">
         </div>
-        <div class="featured-item">
+        <div class="featured-item" data-index="3">
           <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?auto=format&fit=crop&w=500&q=80" alt="Featured 4">
         </div>
       </div>
@@ -1082,19 +1241,19 @@
       <h3 class="section-title">Perfect For Every Room</h3>
       <p class="lead">Transform different spaces with wallpapers designed for specific room requirements</p>
       <div class="room-types">
-        <div class="room-type">
+        <div class="room-type" data-index="0">
           <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=400&q=80" alt="Living Room">
           <span>Living Room</span>
         </div>
-        <div class="room-type">
+        <div class="room-type" data-index="1">
           <img src="https://images.unsplash.com/photo-1618220252344-8ec99ec624b1?auto=format&fit=crop&w=400&q=80" alt="Bedroom">
           <span>Bedroom</span>
         </div>
-        <div class="room-type">
+        <div class="room-type" data-index="2">
           <img src="https://d3gq2merok8n5r.cloudfront.net/abhinav/ond-1634120396-Obfdc/jfm-2024-1704560007-SGQ6F/existing-real-home-assets-1704643706-yeqEk/new-folder-1704645244-RgitI/9-1707818371-yTuNp.jpg" alt="Dining Room">
           <span>Dining Room</span>
         </div>
-        <div class="room-type">
+        <div class="room-type" data-index="3">
           <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?auto=format&fit=crop&w=400&q=80" alt="Office">
           <span>Office</span>
         </div>
@@ -1310,6 +1469,53 @@
       </div>
     </div>
   </footer>
+</div>
+
+<!-- Product Detail Modal -->
+<div id="product-modal" class="product-modal">
+  <div class="product-modal-content">
+    <button class="product-modal-close" id="productModalClose">&times;</button>
+    <div class="product-modal-body">
+      <div class="product-gallery">
+        <img id="product-main-image" class="product-main-image" src="" alt="">
+        <div class="product-thumbnails" id="product-thumbnails">
+          <!-- Thumbnails will be generated here -->
+        </div>
+      </div>
+      <div class="product-details">
+        <h1 id="product-title" class="product-title"></h1>
+        <p id="product-price" class="product-price"></p>
+        <p id="product-full-description" class="product-full-description"></p>
+        
+        <div class="product-features">
+          <h4>Product Features</h4>
+          <ul id="product-features-list">
+            <!-- Features will be generated here -->
+          </ul>
+        </div>
+        
+        <div class="product-actions">
+          <a id="product-whatsapp" class="product-action-primary" href="#" target="_blank">
+            <span>Enquire on WhatsApp</span>
+          </a>
+          <button class="product-action-secondary" id="product-call">
+            Call for Details
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">&times;</button>
+  <div class="lightbox-nav">
+    <button class="lightbox-prev" id="lightboxPrev">&#10094;</button>
+    <button class="lightbox-next" id="lightboxNext">&#10095;</button>
+  </div>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  <div class="lightbox-caption" id="lightboxCaption"></div>
 </div>
 
 <!-- Collection Detail Pages -->
@@ -1562,85 +1768,188 @@ window.addEventListener('DOMContentLoaded', () => {
 // Wall Decor Accessories System
 let products = [];
 
-// Sample initial products - Always use these as the base
+// Enhanced product data with multiple images and details
 const initialProducts = [
   {
     id: 1,
     name: "Gold Framed Mirror",
     description: "Elegant mirror with gold leaf frame, adds luxury and dimension to any space.",
+    fullDescription: "This exquisite gold framed mirror features handcrafted gold leaf detailing that adds a touch of luxury and dimension to any room. Perfect for hallways, living rooms, or bedrooms, it not only serves a functional purpose but also acts as a stunning piece of wall art. The mirror is made with high-quality materials to ensure durability and a clear, distortion-free reflection.",
     price: "₹3,799",
     category: "mirrors",
-    image: "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=500&q=80"
+    images: [
+      "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=500&q=80",
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80",
+      "https://images.unsplash.com/photo-1618220252344-8ec99ec624b1?auto=format&fit=crop&w=500&q=80"
+    ],
+    features: [
+      "Handcrafted gold leaf frame",
+      "Crystal clear, distortion-free glass",
+      "Easy wall mounting included",
+      "Dimensions: 24x36 inches",
+      "Weather-resistant finish"
+    ]
   },
   {
     id: 2,
     name: "Floating Wood Shelves",
     description: "Set of 3 floating shelves in natural wood finish, perfect for displaying decor items.",
+    fullDescription: "These beautiful floating wood shelves create a modern, minimalist look while providing practical storage space. Made from sustainably sourced solid wood with a natural finish that highlights the wood grain. The set includes three shelves of different sizes (12\", 18\", and 24\") that can be arranged in various configurations to suit your space and needs.",
     price: "₹1,899",
     category: "shelves",
-    image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80"
+    images: [
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80",
+      "https://images.unsplash.com/photo-1618220252344-8ec99ec624b1?auto=format&fit=crop&w=500&q=80",
+      "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=500&q=80"
+    ],
+    features: [
+      "Set of 3 shelves (12\", 18\", 24\")",
+      "Sustainably sourced solid wood",
+      "Natural wood grain finish",
+      "Hidden mounting system",
+      "Weight capacity: 15kg per shelf"
+    ]
   },
   {
     id: 3,
     name: "Minimalist Wall Clock",
     description: "Sleek minimalist design with silent movement, perfect for modern interiors.",
+    fullDescription: "This elegant minimalist wall clock features a clean, modern design that complements any interior style. The silent quartz movement ensures no distracting ticking sounds, making it perfect for bedrooms, offices, or living spaces. The large, easy-to-read numerals and sleek black hands create a striking contrast against the white background.",
     price: "₹1,299",
     category: "clocks",
-    image: "https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?auto=format&fit=crop&w=500&q=80"
+    images: [
+      "https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?auto=format&fit=crop&w=500&q=80",
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80",
+      "https://images.unsplash.com/photo-1618220252344-8ec99ec624b1?auto=format&fit=crop&w=500&q=80"
+    ],
+    features: [
+      "Silent quartz movement",
+      "12-inch diameter",
+      "Easy-to-read numerals",
+      "Battery operated (AA battery not included)",
+      "Lightweight yet durable construction"
+    ]
   },
   {
     id: 4,
     name: "Brass Wall Sconces",
     description: "Pair of elegant brass wall sconces with dimmable LED lighting.",
+    fullDescription: "Add ambient lighting to your space with this pair of elegant brass wall sconces. Featuring a timeless design with modern LED technology, these sconces provide warm, dimmable light that creates a cozy atmosphere. Perfect for flanking mirrors, artwork, or as bedside lighting. The solid brass construction ensures longevity and maintains its beautiful finish over time.",
     price: "₹4,299",
     category: "lighting",
-    image: "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?auto=format&fit=crop&w=500&q=80"
+    images: [
+      "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?auto=format&fit=crop&w=500&q=80",
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80",
+      "https://images.unsplash.com/photo-1618220252344-8ec99ec624b1?auto=format&fit=crop&w=500&q=80"
+    ],
+    features: [
+      "Set of 2 brass sconces",
+      "Dimmable LED lighting",
+      "Warm white light (2700K)",
+      "Easy installation",
+      "Energy efficient"
+    ]
   },
   {
     id: 5,
     name: "Metal Wall Sculpture",
     description: "Handcrafted metal wall sculpture with geometric patterns and gold finish.",
+    fullDescription: "This stunning metal wall sculpture features intricate geometric patterns handcrafted by skilled artisans. The gold finish adds a touch of luxury and sophistication to any space. Each piece is unique, with subtle variations that make it a true work of art. Perfect as a focal point in living rooms, entryways, or above furniture.",
     price: "₹3,499",
     category: "wall-art",
-    image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=500&q=80"
+    images: [
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=500&q=80",
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80",
+      "https://images.unsplash.com/photo-1618220252344-8ec99ec624b1?auto=format&fit=crop&w=500&q=80"
+    ],
+    features: [
+      "Handcrafted metal construction",
+      "Luxury gold finish",
+      "Geometric abstract design",
+      "Lightweight yet durable",
+      "Ready to hang"
+    ]
   },
   {
     id: 6,
     name: "Corner Display Shelves",
     description: "Set of 2 triangular corner shelves, perfect for utilizing empty corner spaces.",
+    fullDescription: "Maximize your space with these elegant corner display shelves. The triangular design fits perfectly into any corner, providing stylish storage without taking up valuable floor space. Made from high-quality MDF with a smooth white finish, these shelves are perfect for displaying photos, plants, or decorative items.",
     price: "₹1,599",
     category: "shelves",
-    image: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=500&q=80"
+    images: [
+      "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=500&q=80",
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80"
+    ],
+    features: [
+      "Set of 2 corner shelves",
+      "Space-saving triangular design",
+      "High-quality MDF construction",
+      "Easy wall mounting",
+      "Perfect for corners and small spaces"
+    ]
   },
   {
     id: 7,
     name: "Macrame Wall Planters",
     description: "Set of 3 handmade macrame plant hangers with ceramic pots for indoor plants.",
+    fullDescription: "Bring a touch of boho-chic to your space with these beautiful handmade macrame plant hangers. Each set includes three different sized hangers with matching ceramic pots, perfect for displaying your favorite indoor plants. The natural cotton cord and ceramic pots create a warm, organic look that complements any decor style.",
     price: "₹2,199",
     category: "decor",
-    image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=500&q=80"
+    images: [
+      "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=500&q=80",
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80"
+    ],
+    features: [
+      "Set of 3 macrame hangers",
+      "Includes ceramic pots",
+      "Handmade with natural cotton",
+      "Different sizes for variety",
+      "Perfect for indoor plants"
+    ]
   },
   {
     id: 8,
     name: "Decorative Wall Plates",
     description: "Set of beautiful decorative plates to enhance your wall decor.",
+    fullDescription: "Create a stunning gallery wall with this set of decorative plates featuring intricate patterns and beautiful colors. Each plate is carefully crafted with attention to detail, making them perfect for adding a touch of elegance to your dining room, kitchen, or hallway. The set comes with mounting hardware for easy installation.",
     price: "₹5,300",
     category: "decor",
-    image: "https://shopps.in/wp-content/uploads/2022/01/7111xZqsMGL._AC_SL1500_.jpg"
+    images: [
+      "https://shopps.in/wp-content/uploads/2022/01/7111xZqsMGL._AC_SL1500_.jpg",
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80"
+    ],
+    features: [
+      "Set of decorative plates",
+      "Intricate patterns and designs",
+      "Easy mounting hardware included",
+      "Various sizes and colors",
+      "Creates beautiful gallery walls"
+    ]
   },
   {
     id: 9,
     name: "Pastel Blooms Wall Art",
     description: "Beautiful pastel colored wall art with intricate designs.",
+    fullDescription: "Add a soft, artistic touch to your walls with this beautiful pastel blooms wall art. The delicate floral patterns and soothing pastel colors create a calming atmosphere in any room. Printed on high-quality canvas with fade-resistant inks, this artwork will maintain its vibrant colors for years to come.",
     price: "₹4,600",
     category: "wall-art",
-    image: "https://www.ritualistic.in/cdn/shop/files/decorative-plates-pastel-blooms-wall-plates-set-of-5-ritualistic-pastel-blooms-iron-wall-art-multicolor-set-of-5-home-decor-painting-divine-intricate-designs-6161139389153-29181638148.jpg?v=1746967711"
+    images: [
+      "https://www.ritualistic.in/cdn/shop/files/decorative-plates-pastel-blooms-wall-plates-set-of-5-ritualistic-pastel-blooms-iron-wall-art-multicolor-set-of-5-home-decor-painting-divine-intricate-designs-6161139389153-29181638148.jpg?v=1746967711",
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80"
+    ],
+    features: [
+      "Beautiful pastel color palette",
+      "Intricate floral designs",
+      "High-quality canvas print",
+      "Fade-resistant inks",
+      "Ready to hang"
+    ]
   },
 ];
 
-// Initialize products - Always use initialProducts for consistency
+// Initialize products
 function initializeProducts() {
-  // Always use the initial products array for consistency across devices
   products = [...initialProducts];
   renderProducts();
 }
@@ -1658,9 +1967,10 @@ function renderProducts(filterCategory = 'all') {
     const productElement = document.createElement('div');
     productElement.className = 'accessory-item';
     productElement.setAttribute('data-category', product.category);
+    productElement.setAttribute('data-id', product.id);
     
     productElement.innerHTML = `
-      <img src="${product.image}" alt="${product.name}" class="accessory-image">
+      <img src="${product.images[0]}" alt="${product.name}" class="accessory-image">
       <div class="accessory-details">
         <h4 class="accessory-name">${product.name}</h4>
         <p class="accessory-description">${product.description}</p>
@@ -1668,6 +1978,14 @@ function renderProducts(filterCategory = 'all') {
         <a href="https://wa.me/917973890562?text=Hi%20Amjo%20Walls,%20I'm%20interested%20in%20${encodeURIComponent(product.name)}" class="accessory-cta">Enquire Now</a>
       </div>
     `;
+    
+    // Add click event to open product modal
+    productElement.addEventListener('click', (e) => {
+      // Don't open modal if clicking the Enquire Now button
+      if (!e.target.closest('.accessory-cta')) {
+        openProductModal(product);
+      }
+    });
     
     grid.appendChild(productElement);
   });
@@ -1686,6 +2004,185 @@ accessoryCategories.forEach(category => {
     
     const selectedCategory = category.getAttribute('data-category');
     renderProducts(selectedCategory);
+  });
+});
+
+// Product Detail Modal
+const productModal = document.getElementById('product-modal');
+const productModalClose = document.getElementById('productModalClose');
+
+function openProductModal(product) {
+  // Set main product image
+  document.getElementById('product-main-image').src = product.images[0];
+  document.getElementById('product-main-image').alt = product.name;
+  
+  // Set product details
+  document.getElementById('product-title').textContent = product.name;
+  document.getElementById('product-price').textContent = product.price;
+  document.getElementById('product-full-description').textContent = product.fullDescription;
+  
+  // Set WhatsApp link
+  const whatsappLink = document.getElementById('product-whatsapp');
+  whatsappLink.href = `https://wa.me/917973890562?text=${encodeURIComponent(`Hi Amjo Walls, I'm interested in: ${product.name} (${product.price})`)}`;
+  
+  // Set call button
+  document.getElementById('product-call').addEventListener('click', () => {
+    window.location.href = 'tel:+917973890562';
+  });
+  
+  // Generate thumbnails
+  const thumbnailsContainer = document.getElementById('product-thumbnails');
+  thumbnailsContainer.innerHTML = '';
+  
+  product.images.forEach((image, index) => {
+    const thumbnail = document.createElement('img');
+    thumbnail.className = 'product-thumbnail';
+    thumbnail.src = image;
+    thumbnail.alt = `${product.name} - View ${index + 1}`;
+    
+    if (index === 0) {
+      thumbnail.classList.add('active');
+    }
+    
+    thumbnail.addEventListener('click', () => {
+      // Update main image
+      document.getElementById('product-main-image').src = image;
+      
+      // Update active thumbnail
+      document.querySelectorAll('.product-thumbnail').forEach(thumb => thumb.classList.remove('active'));
+      thumbnail.classList.add('active');
+    });
+    
+    thumbnailsContainer.appendChild(thumbnail);
+  });
+  
+  // Generate features list
+  const featuresList = document.getElementById('product-features-list');
+  featuresList.innerHTML = '';
+  
+  product.features.forEach(feature => {
+    const li = document.createElement('li');
+    li.textContent = feature;
+    featuresList.appendChild(li);
+  });
+  
+  // Show modal
+  productModal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProductModal() {
+  productModal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+// Close modal events
+productModalClose.addEventListener('click', closeProductModal);
+productModal.addEventListener('click', (e) => {
+  if (e.target === productModal) {
+    closeProductModal();
+  }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && productModal.classList.contains('active')) {
+    closeProductModal();
+  }
+});
+
+// Lightbox functionality for Featured Wallpapers and Room Types
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+const lightboxCaption = document.getElementById('lightboxCaption');
+const lightboxClose = document.getElementById('lightboxClose');
+const lightboxPrev = document.getElementById('lightboxPrev');
+const lightboxNext = document.getElementById('lightboxNext');
+
+let currentImageSet = [];
+let currentIndex = 0;
+
+function openLightbox(images, index) {
+  currentImageSet = images;
+  currentIndex = index;
+  updateLightbox();
+  lightbox.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function updateLightbox() {
+  if (currentImageSet.length > 0) {
+    lightboxImg.src = currentImageSet[currentIndex].src;
+    lightboxCaption.textContent = currentImageSet[currentIndex].alt;
+    
+    // Show/hide navigation buttons
+    lightboxPrev.style.display = currentIndex > 0 ? 'flex' : 'none';
+    lightboxNext.style.display = currentIndex < currentImageSet.length - 1 ? 'flex' : 'none';
+  }
+}
+
+function closeLightbox() {
+  lightbox.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+lightboxClose.addEventListener('click', closeLightbox);
+lightboxPrev.addEventListener('click', () => {
+  if (currentIndex > 0) {
+    currentIndex--;
+    updateLightbox();
+  }
+});
+lightboxNext.addEventListener('click', () => {
+  if (currentIndex < currentImageSet.length - 1) {
+    currentIndex++;
+    updateLightbox();
+  }
+});
+
+// Close lightbox when clicking outside the image
+lightbox.addEventListener('click', (e) => {
+  if (e.target === lightbox) {
+    closeLightbox();
+  }
+});
+
+// Keyboard navigation for lightbox
+document.addEventListener('keydown', (e) => {
+  if (!lightbox.classList.contains('active')) return;
+  
+  if (e.key === 'Escape') {
+    closeLightbox();
+  } else if (e.key === 'ArrowLeft') {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateLightbox();
+    }
+  } else if (e.key === 'ArrowRight') {
+    if (currentIndex < currentImageSet.length - 1) {
+      currentIndex++;
+      updateLightbox();
+    }
+  }
+});
+
+// Add click events to Featured Wallpapers
+const featuredItems = document.querySelectorAll('.featured-item');
+featuredItems.forEach(item => {
+  item.addEventListener('click', () => {
+    const images = Array.from(featuredItems).map(el => el.querySelector('img'));
+    const index = parseInt(item.getAttribute('data-index'));
+    openLightbox(images, index);
+  });
+});
+
+// Add click events to Room Types
+const roomTypes = document.querySelectorAll('.room-type');
+roomTypes.forEach(item => {
+  item.addEventListener('click', () => {
+    const images = Array.from(roomTypes).map(el => el.querySelector('img'));
+    const index = parseInt(item.getAttribute('data-index'));
+    openLightbox(images, index);
   });
 });
 
