@@ -1731,8 +1731,10 @@
 </div>
 
 <script>
-// Store scroll position before navigating to collection pages
+// Store scroll position and navigation state
 let scrollPosition = 0;
+let currentSection = '';
+let isNavigatingBack = false;
 
 // Mobile Navigation Toggle
 const menuBtn = document.getElementById('menuBtn');
@@ -1747,21 +1749,17 @@ menuBtn.addEventListener('click', function() {
 // Close mobile menu when clicking on a link
 const mobileNavLinks = mobileNav.querySelectorAll('a');
 mobileNavLinks.forEach(link => {
-  link.addEventListener('click', () => {
+  link.addEventListener('click', (e) => {
+    // Store current section and scroll position before navigation
+    const targetSection = e.target.getAttribute('href').substring(1);
+    if (targetSection !== currentSection) {
+      scrollPosition = window.scrollY;
+      currentSection = targetSection;
+    }
+    
     menuBtn.setAttribute('aria-expanded', 'false');
     mobileNav.classList.remove('open');
   });
-});
-
-// Close mobile menu when clicking outside
-document.addEventListener('click', function(event) {
-  const isClickInsideNav = mobileNav.contains(event.target);
-  const isClickOnMenuBtn = menuBtn.contains(event.target);
-  
-  if (!isClickInsideNav && !isClickOnMenuBtn && mobileNav.classList.contains('open')) {
-    menuBtn.setAttribute('aria-expanded', 'false');
-    mobileNav.classList.remove('open');
-  }
 });
 
 // Fade-up animation
@@ -1812,6 +1810,7 @@ tiles.forEach(tile => {
   tile.addEventListener('click', () => {
     // Store current scroll position before navigating
     scrollPosition = window.scrollY;
+    currentSection = 'collections';
     
     const collectionId = tile.getAttribute('data-collection');
     const collectionPage = document.getElementById(`${collectionId}-page`);
@@ -1820,50 +1819,124 @@ tiles.forEach(tile => {
       mainContent.style.display = 'none';
       collectionPage.style.display = 'block';
       window.scrollTo(0, 0);
-      history.pushState({ collection: collectionId }, '', `#${collectionId}`);
+      history.pushState({ 
+        collection: collectionId, 
+        section: 'collections',
+        scrollPos: scrollPosition 
+      }, '', `#${collectionId}`);
     }
   });
 });
 
 // Back to collections function
 function goBackToCollections() {
+  isNavigatingBack = true;
   collectionPages.forEach(page => {
     page.style.display = 'none';
   });
   mainContent.style.display = 'block';
   
   // Restore scroll position to where user was before opening collection
-  window.scrollTo(0, scrollPosition);
+  if (scrollPosition > 0) {
+    setTimeout(() => {
+      window.scrollTo(0, scrollPosition);
+      isNavigatingBack = false;
+    }, 100);
+  } else {
+    // If no stored position, scroll to collections section
+    document.getElementById('collections').scrollIntoView({ behavior: 'smooth' });
+    isNavigatingBack = false;
+  }
   
   history.pushState({}, '', window.location.pathname);
 }
 
 // Handle browser back/forward buttons
 window.addEventListener('popstate', (event) => {
+  isNavigatingBack = true;
+  
   if (event.state && event.state.collection) {
     mainContent.style.display = 'none';
     const collectionPage = document.getElementById(`${event.state.collection}-page`);
     if (collectionPage) {
       collectionPage.style.display = 'block';
     }
+    // Restore scroll position if available
+    if (event.state.scrollPos) {
+      setTimeout(() => {
+        window.scrollTo(0, event.state.scrollPos);
+        isNavigatingBack = false;
+      }, 100);
+    }
+  } else if (event.state && event.state.modal) {
+    // Close product modal when going back
+    closeProductModal();
+    // Restore scroll position
+    if (event.state.scrollPos) {
+      setTimeout(() => {
+        window.scrollTo(0, event.state.scrollPos);
+        isNavigatingBack = false;
+      }, 100);
+    }
   } else {
     mainContent.style.display = 'block';
     collectionPages.forEach(page => {
       page.style.display = 'none';
     });
+    // Close any open modals
+    closeProductModal();
     // Restore scroll position when navigating back from collection
-    window.scrollTo(0, scrollPosition);
+    if (scrollPosition > 0) {
+      setTimeout(() => {
+        window.scrollTo(0, scrollPosition);
+        isNavigatingBack = false;
+      }, 100);
+    }
   }
 });
 
 // Handle direct URL access to collections
 window.addEventListener('DOMContentLoaded', () => {
   const hash = window.location.hash.substring(1);
-  if (hash) {
+  if (hash && hash.startsWith('product-')) {
+    // Handle product modal URLs if needed
+  } else if (hash) {
     const collectionPage = document.getElementById(`${hash}-page`);
     if (collectionPage) {
       mainContent.style.display = 'none';
       collectionPage.style.display = 'block';
+    }
+  }
+});
+
+// Store scroll position when navigating to sections
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    const href = this.getAttribute('href');
+    if (href !== '#' && !href.startsWith('#product-')) {
+      // Store current scroll position before navigating
+      scrollPosition = window.scrollY;
+      currentSection = href.substring(1);
+    }
+  });
+});
+
+// Store scroll position on page load
+window.addEventListener('load', () => {
+  scrollPosition = window.scrollY;
+  // Store initial state
+  history.replaceState({ 
+    section: 'home',
+    scrollPos: scrollPosition 
+  }, '', window.location.pathname);
+});
+
+// Store scroll position on scroll (but not during navigation)
+window.addEventListener('scroll', () => {
+  if (!isNavigatingBack) {
+    // Only store position if not at the very top or bottom
+    if (window.scrollY > 100 && window.scrollY < (document.body.scrollHeight - window.innerHeight - 100)) {
+      scrollPosition = window.scrollY;
     }
   }
 });
@@ -2115,6 +2188,10 @@ const productModal = document.getElementById('product-modal');
 const productModalClose = document.getElementById('productModalClose');
 
 function openProductModal(product) {
+  // Store current scroll position before opening modal
+  scrollPosition = window.scrollY;
+  currentSection = 'accessories';
+  
   // Set main product image
   document.getElementById('product-main-image').src = product.images[0];
   document.getElementById('product-main-image').alt = product.name;
@@ -2169,14 +2246,27 @@ function openProductModal(product) {
     featuresList.appendChild(li);
   });
   
-  // Show modal
+  // Show modal and push to history
   productModal.classList.add('active');
   document.body.style.overflow = 'hidden';
+  
+  history.pushState({ 
+    modal: 'product', 
+    section: currentSection,
+    scrollPos: scrollPosition 
+  }, '', `#product-${product.id}`);
 }
 
 function closeProductModal() {
   productModal.classList.remove('active');
   document.body.style.overflow = '';
+  
+  // Restore scroll position when closing modal
+  if (scrollPosition > 0) {
+    setTimeout(() => {
+      window.scrollTo(0, scrollPosition);
+    }, 100);
+  }
 }
 
 // Close modal events
