@@ -1469,7 +1469,7 @@
           </div>
           <p style="margin-top:12px;color:var(--muted)">Booking is free and takes just one call. Service area: Moga & nearby towns.</p>
           <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
-            <a class="cta" href="https://wa.me/917973890562">Book on WhatsApp</a>
+            <a class="cta" href="https://wa.me/917973890562?text=Welcome%20to%20Amjo%20Walls%20%E2%80%94%20Moga%2C%20Punjab!%20%F0%9F%8E%A8%0APremium%20wallpapers%20for%20living%20rooms%2C%20bedrooms%20%26%20kids%E2%80%99%20rooms.%0ALeave%20your%20message%20and%20we%E2%80%99ll%20get%20back%20to%20you%20soon.">Book on WhatsApp</a>
             <a class="cta secondary" href="tel:+917973890562">Call: 7973890562</a>
           </div>
         </div>
@@ -1775,14 +1775,151 @@
 </div>
 
 <div class="float-wrap" role="navigation" aria-label="Quick actions">
-  <a class="fab wa" href="https://wa.me/917973890562" title="Chat on WhatsApp" aria-label="WhatsApp">💬</a>
+  <a class="fab wa" href="https://wa.me/917973890562?text=Welcome%20to%20Amjo%20Walls%20%E2%80%94%20Moga%2C%20Punjab!%20%F0%9F%8E%A8%0APremium%20wallpapers%20for%20living%20rooms%2C%20bedrooms%20%26%20kids%E2%80%99%20rooms.%0ALeave%20your%20message%20and%20we%E2%80%99ll%20get%20back%20to%20you%20soon." title="Chat on WhatsApp" aria-label="WhatsApp">💬</a>
   <a class="fab call" href="tel:+917973890562" title="Call now" aria-label="Call">📞</a>
 </div>
 
 <script>
-// COMPLETELY REWRITTEN NAVIGATION SYSTEM - SIMPLE AND RELIABLE
-let currentScrollPosition = 0;
-let isInCollection = false;
+// COMPLETELY REWRITTEN NAVIGATION SYSTEM - BULLETPROOF
+let appState = {
+  currentPage: 'main',
+  previousPage: null,
+  scrollPositions: {
+    collections: 0,
+    accessories: 0,
+    featured: 0,
+    rooms: 0
+  }
+};
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', function() {
+  initializeProducts();
+  setupNavigation();
+  setupEventListeners();
+});
+
+function setupNavigation() {
+  // Store initial state
+  history.replaceState(appState, '', window.location.href);
+}
+
+function setupEventListeners() {
+  // Handle browser back/forward buttons
+  window.addEventListener('popstate', function(event) {
+    if (event.state) {
+      appState = event.state;
+      handleStateChange();
+    }
+  });
+
+  // Track scroll positions
+  window.addEventListener('scroll', trackScrollPositions);
+}
+
+function trackScrollPositions() {
+  if (appState.currentPage === 'main') {
+    const sections = ['collections', 'accessories', 'featured', 'rooms'];
+    sections.forEach(section => {
+      const element = document.getElementById(section);
+      if (element && isElementInViewport(element)) {
+        appState.scrollPositions[section] = window.scrollY;
+      }
+    });
+  }
+}
+
+function isElementInViewport(el) {
+  const rect = el.getBoundingClientRect();
+  return (
+    rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.bottom >= 0
+  );
+}
+
+// Collection navigation - COMPLETELY REWRITTEN
+const tiles = document.querySelectorAll('.tile');
+const mainContent = document.getElementById('main-content');
+const collectionPages = document.querySelectorAll('.collection-detail');
+
+tiles.forEach(tile => {
+  tile.addEventListener('click', function(e) {
+    e.preventDefault();
+    
+    // Store current state
+    appState.previousPage = appState.currentPage;
+    appState.scrollPositions.collections = window.scrollY;
+    
+    const collectionId = this.getAttribute('data-collection');
+    const collectionPage = document.getElementById(`${collectionId}-page`);
+    
+    if (collectionPage) {
+      // Update app state
+      appState.currentPage = 'collection';
+      appState.collectionId = collectionId;
+      
+      // Update display
+      showCollectionPage(collectionId);
+      
+      // Update history
+      history.pushState(appState, '', `#${collectionId}`);
+    }
+  });
+});
+
+function showCollectionPage(collectionId) {
+  // Hide main content and show collection page
+  mainContent.style.display = 'none';
+  collectionPages.forEach(page => page.style.display = 'none');
+  
+  const targetPage = document.getElementById(`${collectionId}-page`);
+  if (targetPage) {
+    targetPage.style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+}
+
+// Back to collections function - PERMANENTLY FIXED
+function goBackToCollections() {
+  // Update app state
+  appState.currentPage = 'main';
+  appState.collectionId = null;
+  
+  // Update display
+  showMainContent();
+  
+  // Update history
+  history.pushState(appState, '', window.location.pathname);
+}
+
+function showMainContent() {
+  // Show main content and hide all collection pages
+  mainContent.style.display = 'block';
+  collectionPages.forEach(page => page.style.display = 'none');
+  
+  // Restore scroll position
+  setTimeout(() => {
+    const scrollPosition = appState.scrollPositions.collections || 0;
+    if (scrollPosition > 0) {
+      window.scrollTo(0, scrollPosition);
+    }
+  }, 50);
+}
+
+function handleStateChange() {
+  switch (appState.currentPage) {
+    case 'main':
+      showMainContent();
+      break;
+    case 'collection':
+      if (appState.collectionId) {
+        showCollectionPage(appState.collectionId);
+      }
+      break;
+    default:
+      showMainContent();
+  }
+}
 
 // Mobile Navigation
 const menuBtn = document.getElementById('menuBtn');
@@ -1807,7 +1944,26 @@ menuBtn.addEventListener('click', function(e) {
 // Close mobile menu when clicking on a link
 const mobileNavLinks = mobileNav.querySelectorAll('a');
 mobileNavLinks.forEach(link => {
-  link.addEventListener('click', closeMobileNav);
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const targetId = this.getAttribute('href').substring(1);
+    
+    // Update app state
+    appState.previousPage = appState.currentPage;
+    appState.currentPage = 'main';
+    
+    // Close mobile menu
+    closeMobileNav();
+    
+    // Scroll to section
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    // Update history
+    history.pushState(appState, '', `#${targetId}`);
+  });
 });
 
 // Close mobile menu when clicking outside
@@ -1853,113 +2009,6 @@ if (contactForm) {
 
 // Set current year in footer
 document.getElementById('year').textContent = new Date().getFullYear();
-
-// Track scroll position
-window.addEventListener('scroll', () => {
-  if (!isInCollection) {
-    currentScrollPosition = window.scrollY;
-  }
-});
-
-// Collection navigation - SIMPLIFIED AND RELIABLE
-const tiles = document.querySelectorAll('.tile');
-const mainContent = document.getElementById('main-content');
-const collectionPages = document.querySelectorAll('.collection-detail');
-
-tiles.forEach(tile => {
-  tile.addEventListener('click', () => {
-    // Store current scroll position
-    currentScrollPosition = window.scrollY;
-    
-    const collectionId = tile.getAttribute('data-collection');
-    const collectionPage = document.getElementById(`${collectionId}-page`);
-    
-    if (collectionPage) {
-      // Hide main content and show collection page
-      mainContent.style.display = 'none';
-      collectionPages.forEach(page => page.style.display = 'none');
-      collectionPage.style.display = 'block';
-      
-      // Update state
-      isInCollection = true;
-      
-      // Scroll to top of collection page
-      window.scrollTo(0, 0);
-      
-      // Update URL without pushing to history (we'll handle back button separately)
-      window.location.hash = collectionId;
-    }
-  });
-});
-
-// Back to collections function - SIMPLIFIED
-function goBackToCollections() {
-  // Hide all collection pages
-  collectionPages.forEach(page => {
-    page.style.display = 'none';
-  });
-  
-  // Show main content
-  mainContent.style.display = 'block';
-  
-  // Update state
-  isInCollection = false;
-  
-  // Restore scroll position
-  setTimeout(() => {
-    window.scrollTo(0, currentScrollPosition);
-  }, 50);
-  
-  // Update URL
-  window.location.hash = 'collections';
-}
-
-// Handle browser back/forward buttons
-window.addEventListener('popstate', (event) => {
-  const hash = window.location.hash.substring(1);
-  const validCollections = ['vinyl', 'fabric', 'non-woven', 'flora', 'paper', 'textured'];
-  
-  if (validCollections.includes(hash)) {
-    // Show collection page
-    const collectionPage = document.getElementById(`${hash}-page`);
-    if (collectionPage) {
-      mainContent.style.display = 'none';
-      collectionPages.forEach(page => page.style.display = 'none');
-      collectionPage.style.display = 'block';
-      isInCollection = true;
-      window.scrollTo(0, 0);
-    }
-  } else {
-    // Show main content
-    mainContent.style.display = 'block';
-    collectionPages.forEach(page => page.style.display = 'none');
-    isInCollection = false;
-    
-    // Restore scroll position
-    setTimeout(() => {
-      if (hash === 'collections' && currentScrollPosition > 0) {
-        window.scrollTo(0, currentScrollPosition);
-      } else if (hash && document.getElementById(hash)) {
-        document.getElementById(hash).scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 50);
-  }
-});
-
-// Handle direct URL access to collections
-window.addEventListener('DOMContentLoaded', () => {
-  const hash = window.location.hash.substring(1);
-  const validCollections = ['vinyl', 'fabric', 'non-woven', 'flora', 'paper', 'textured'];
-  
-  if (validCollections.includes(hash)) {
-    const collectionPage = document.getElementById(`${hash}-page`);
-    if (collectionPage) {
-      mainContent.style.display = 'none';
-      collectionPage.style.display = 'block';
-      isInCollection = true;
-    }
-  }
-});
 
 // Wall Decor Accessories System with Stock Information
 let products = [];
@@ -2425,11 +2474,6 @@ roomTypes.forEach(item => {
     const index = parseInt(item.getAttribute('data-index'));
     openLightbox(images, index);
   });
-});
-
-// Initialize the products when page loads
-document.addEventListener('DOMContentLoaded', function() {
-  initializeProducts();
 });
 </script>
 
