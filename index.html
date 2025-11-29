@@ -1043,47 +1043,6 @@
     background: rgba(255,255,255,0.02);
     color: var(--accent);
   }
-
-  /* Stock Status Styles */
-  .stock-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    margin-top: 8px;
-  }
-  .stock-in-stock {
-    background: rgba(16, 185, 129, 0.1);
-    color: #10b981;
-    border: 1px solid rgba(16, 185, 129, 0.2);
-  }
-  .stock-low-stock {
-    background: rgba(245, 158, 11, 0.1);
-    color: #f59e0b;
-    border: 1px solid rgba(245, 158, 11, 0.2);
-  }
-  .stock-out-of-stock {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
-    border: 1px solid rgba(239, 68, 68, 0.2);
-  }
-  .stock-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-  }
-  .stock-in-stock .stock-dot {
-    background: #10b981;
-  }
-  .stock-low-stock .stock-dot {
-    background: #f59e0b;
-  }
-  .stock-out-of-stock .stock-dot {
-    background: #ef4444;
-  }
   
   @media(max-width:1024px){
     .grid{grid-template-columns:repeat(2,1fr)}
@@ -1469,7 +1428,7 @@
           </div>
           <p style="margin-top:12px;color:var(--muted)">Booking is free and takes just one call. Service area: Moga & nearby towns.</p>
           <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
-            <a class="cta" href="https://wa.me/917973890562?text=Welcome%20to%20Amjo%20Walls%20%E2%80%94%20Moga%2C%20Punjab!%20%F0%9F%8E%A8%0APremium%20wallpapers%20for%20living%20rooms%2C%20bedrooms%20%26%20kids%E2%80%99%20rooms.%0ALeave%20your%20message%20and%20we%E2%80%99ll%20get%20back%20to%20you%20soon.">Book on WhatsApp</a>
+            <a class="cta" href="https://wa.me/917973890562">Book on WhatsApp</a>
             <a class="cta secondary" href="tel:+917973890562">Call: 7973890562</a>
           </div>
         </div>
@@ -1775,151 +1734,25 @@
 </div>
 
 <div class="float-wrap" role="navigation" aria-label="Quick actions">
-  <a class="fab wa" href="https://wa.me/917973890562?text=Welcome%20to%20Amjo%20Walls%20%E2%80%94%20Moga%2C%20Punjab!%20%F0%9F%8E%A8%0APremium%20wallpapers%20for%20living%20rooms%2C%20bedrooms%20%26%20kids%E2%80%99%20rooms.%0ALeave%20your%20message%20and%20we%E2%80%99ll%20get%20back%20to%20you%20soon." title="Chat on WhatsApp" aria-label="WhatsApp">💬</a>
+  <a class="fab wa" href="https://wa.me/917973890562" title="Chat on WhatsApp" aria-label="WhatsApp">💬</a>
   <a class="fab call" href="tel:+917973890562" title="Call now" aria-label="Call">📞</a>
 </div>
 
 <script>
-// COMPLETELY REWRITTEN NAVIGATION SYSTEM - BULLETPROOF
-let appState = {
-  currentPage: 'main',
-  previousPage: null,
-  scrollPositions: {
-    collections: 0,
-    accessories: 0,
-    featured: 0,
-    rooms: 0
-  }
+// COMPLETELY REWRITTEN NAVIGATION SYSTEM
+// Simple, reliable scroll position management
+
+// Store scroll positions
+let scrollPositions = {
+  collections: 0,
+  accessories: 0
 };
 
-// Initialize when page loads
-document.addEventListener('DOMContentLoaded', function() {
-  initializeProducts();
-  setupNavigation();
-  setupEventListeners();
-});
+// Track if lightbox is open
+let isLightboxOpen = false;
 
-function setupNavigation() {
-  // Store initial state
-  history.replaceState(appState, '', window.location.href);
-}
-
-function setupEventListeners() {
-  // Handle browser back/forward buttons
-  window.addEventListener('popstate', function(event) {
-    if (event.state) {
-      appState = event.state;
-      handleStateChange();
-    }
-  });
-
-  // Track scroll positions
-  window.addEventListener('scroll', trackScrollPositions);
-}
-
-function trackScrollPositions() {
-  if (appState.currentPage === 'main') {
-    const sections = ['collections', 'accessories', 'featured', 'rooms'];
-    sections.forEach(section => {
-      const element = document.getElementById(section);
-      if (element && isElementInViewport(element)) {
-        appState.scrollPositions[section] = window.scrollY;
-      }
-    });
-  }
-}
-
-function isElementInViewport(el) {
-  const rect = el.getBoundingClientRect();
-  return (
-    rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.bottom >= 0
-  );
-}
-
-// Collection navigation - COMPLETELY REWRITTEN
-const tiles = document.querySelectorAll('.tile');
-const mainContent = document.getElementById('main-content');
-const collectionPages = document.querySelectorAll('.collection-detail');
-
-tiles.forEach(tile => {
-  tile.addEventListener('click', function(e) {
-    e.preventDefault();
-    
-    // Store current state
-    appState.previousPage = appState.currentPage;
-    appState.scrollPositions.collections = window.scrollY;
-    
-    const collectionId = this.getAttribute('data-collection');
-    const collectionPage = document.getElementById(`${collectionId}-page`);
-    
-    if (collectionPage) {
-      // Update app state
-      appState.currentPage = 'collection';
-      appState.collectionId = collectionId;
-      
-      // Update display
-      showCollectionPage(collectionId);
-      
-      // Update history
-      history.pushState(appState, '', `#${collectionId}`);
-    }
-  });
-});
-
-function showCollectionPage(collectionId) {
-  // Hide main content and show collection page
-  mainContent.style.display = 'none';
-  collectionPages.forEach(page => page.style.display = 'none');
-  
-  const targetPage = document.getElementById(`${collectionId}-page`);
-  if (targetPage) {
-    targetPage.style.display = 'block';
-    window.scrollTo(0, 0);
-  }
-}
-
-// Back to collections function - PERMANENTLY FIXED
-function goBackToCollections() {
-  // Update app state
-  appState.currentPage = 'main';
-  appState.collectionId = null;
-  
-  // Update display
-  showMainContent();
-  
-  // Update history
-  history.pushState(appState, '', window.location.pathname);
-}
-
-function showMainContent() {
-  // Show main content and hide all collection pages
-  mainContent.style.display = 'block';
-  collectionPages.forEach(page => page.style.display = 'none');
-  
-  // Restore scroll position
-  setTimeout(() => {
-    const scrollPosition = appState.scrollPositions.collections || 0;
-    if (scrollPosition > 0) {
-      window.scrollTo(0, scrollPosition);
-    }
-  }, 50);
-}
-
-function handleStateChange() {
-  switch (appState.currentPage) {
-    case 'main':
-      showMainContent();
-      break;
-    case 'collection':
-      if (appState.collectionId) {
-        showCollectionPage(appState.collectionId);
-      }
-      break;
-    default:
-      showMainContent();
-  }
-}
+// Track current collection
+let currentCollection = null;
 
 // Mobile Navigation
 const menuBtn = document.getElementById('menuBtn');
@@ -1944,26 +1777,7 @@ menuBtn.addEventListener('click', function(e) {
 // Close mobile menu when clicking on a link
 const mobileNavLinks = mobileNav.querySelectorAll('a');
 mobileNavLinks.forEach(link => {
-  link.addEventListener('click', function(e) {
-    e.preventDefault();
-    const targetId = this.getAttribute('href').substring(1);
-    
-    // Update app state
-    appState.previousPage = appState.currentPage;
-    appState.currentPage = 'main';
-    
-    // Close mobile menu
-    closeMobileNav();
-    
-    // Scroll to section
-    const targetElement = document.getElementById(targetId);
-    if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth' });
-    }
-    
-    // Update history
-    history.pushState(appState, '', `#${targetId}`);
-  });
+  link.addEventListener('click', closeMobileNav);
 });
 
 // Close mobile menu when clicking outside
@@ -2010,10 +1824,151 @@ if (contactForm) {
 // Set current year in footer
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// Wall Decor Accessories System with Stock Information
+// Track scroll positions for different sections
+window.addEventListener('scroll', () => {
+  const collectionsSection = document.getElementById('collections');
+  const accessoriesSection = document.getElementById('accessories');
+  
+  if (collectionsSection && isElementInViewport(collectionsSection)) {
+    scrollPositions.collections = window.scrollY;
+  }
+  
+  if (accessoriesSection && isElementInViewport(accessoriesSection)) {
+    scrollPositions.accessories = window.scrollY;
+  }
+});
+
+function isElementInViewport(el) {
+  const rect = el.getBoundingClientRect();
+  return (
+    rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.bottom >= 0
+  );
+}
+
+// Collection navigation - FIXED VERSION
+const tiles = document.querySelectorAll('.tile');
+const mainContent = document.getElementById('main-content');
+const collectionPages = document.querySelectorAll('.collection-detail');
+
+tiles.forEach(tile => {
+  tile.addEventListener('click', () => {
+    // Store current collections scroll position
+    scrollPositions.collections = window.scrollY;
+    
+    const collectionId = tile.getAttribute('data-collection');
+    const collectionPage = document.getElementById(`${collectionId}-page`);
+    
+    if (collectionPage) {
+      mainContent.style.display = 'none';
+      collectionPage.style.display = 'block';
+      window.scrollTo(0, 0);
+      currentCollection = collectionId;
+      
+      // Push to history
+      history.pushState({ 
+        type: 'collection',
+        collection: collectionId,
+        scrollPosition: scrollPositions.collections
+      }, '', `#${collectionId}`);
+    }
+  });
+});
+
+// Back to collections function - COMPLETELY REWRITTEN
+function goBackToCollections() {
+  // Get the stored scroll position from history state
+  const state = history.state;
+  const scrollPosition = state ? state.scrollPosition : scrollPositions.collections;
+  
+  // Hide all collection pages
+  collectionPages.forEach(page => {
+    page.style.display = 'none';
+  });
+  
+  // Show main content
+  mainContent.style.display = 'block';
+  
+  // Restore collections scroll position after DOM update
+  setTimeout(() => {
+    if (scrollPosition > 0) {
+      window.scrollTo(0, scrollPosition);
+    }
+  }, 100); // Increased timeout to ensure DOM is ready
+  
+  // Update history
+  if (window.location.hash) {
+    history.pushState({ type: 'main' }, '', window.location.pathname);
+  }
+  currentCollection = null;
+}
+
+// Handle browser back/forward buttons - COMPLETELY REWRITTEN
+window.addEventListener('popstate', (event) => {
+  // Check if lightbox is open and close it first
+  if (isLightboxOpen) {
+    closeLightbox();
+    // Prevent further processing if lightbox was open
+    history.pushState(null, '', window.location.href);
+    return;
+  }
+  
+  if (event.state && event.state.type === 'collection') {
+    // Show collection page
+    mainContent.style.display = 'none';
+    const collectionPage = document.getElementById(`${event.state.collection}-page`);
+    if (collectionPage) {
+      collectionPage.style.display = 'block';
+      window.scrollTo(0, 0);
+      currentCollection = event.state.collection;
+    }
+  } else {
+    // Show main content and restore appropriate scroll position
+    mainContent.style.display = 'block';
+    collectionPages.forEach(page => {
+      page.style.display = 'none';
+    });
+    
+    // Restore scroll position based on current URL hash or stored position
+    setTimeout(() => {
+      const hash = window.location.hash.substring(1);
+      const state = history.state;
+      
+      if (state && state.scrollPosition) {
+        // Use scroll position from state if available
+        window.scrollTo(0, state.scrollPosition);
+      } else if (hash === 'collections' && scrollPositions.collections > 0) {
+        window.scrollTo(0, scrollPositions.collections);
+      } else if (hash === 'accessories' && scrollPositions.accessories > 0) {
+        window.scrollTo(0, scrollPositions.accessories);
+      }
+    }, 100); // Increased timeout to ensure DOM is ready
+    
+    currentCollection = null;
+  }
+});
+
+// Handle direct URL access to collections
+window.addEventListener('DOMContentLoaded', () => {
+  const hash = window.location.hash.substring(1);
+  const collectionPage = document.getElementById(`${hash}-page`);
+  
+  if (collectionPage) {
+    mainContent.style.display = 'none';
+    collectionPage.style.display = 'block';
+    currentCollection = hash;
+    history.replaceState({ 
+      type: 'collection',
+      collection: hash,
+      scrollPosition: 0
+    }, '', `#${hash}`);
+  }
+});
+
+// Wall Decor Accessories System
 let products = [];
 
-// Enhanced product data with stock information
+// Enhanced product data with multiple images and details
 const initialProducts = [
   {
     id: 1,
@@ -2022,7 +1977,6 @@ const initialProducts = [
     fullDescription: "This exquisite gold framed mirror features handcrafted gold leaf detailing that adds a touch of luxury and dimension to any room. Perfect for hallways, living rooms, or bedrooms, it not only serves a functional purpose but also acts as a stunning piece of wall art. The mirror is made with high-quality materials to ensure durability and a clear, distortion-free reflection.",
     price: "₹3,799",
     category: "mirrors",
-    stock: 4,
     images: [
       "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=500&q=80",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80",
@@ -2043,7 +1997,6 @@ const initialProducts = [
     fullDescription: "These beautiful floating wood shelves create a modern, minimalist look while providing practical storage space. Made from sustainably sourced solid wood with a natural finish that highlights the wood grain. The set includes three shelves of different sizes (12\", 18\", and 24\") that can be arranged in various configurations to suit your space and needs.",
     price: "₹1,899",
     category: "shelves",
-    stock: 0,
     images: [
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80",
       "https://images.unsplash.com/photo-1618220252344-8ec99ec624b1?auto=format&fit=crop&w=500&q=80",
@@ -2064,7 +2017,6 @@ const initialProducts = [
     fullDescription: "This elegant minimalist wall clock features a clean, modern design that complements any interior style. The silent quartz movement ensures no distracting ticking sounds, making it perfect for bedrooms, offices, or living spaces. The large, easy-to-read numerals and sleek black hands create a striking contrast against the white background.",
     price: "₹1,299",
     category: "clocks",
-    stock: 12,
     images: [
       "https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?auto=format&fit=crop&w=500&q=80",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80",
@@ -2085,7 +2037,6 @@ const initialProducts = [
     fullDescription: "Add ambient lighting to your space with this pair of elegant brass wall sconces. Featuring a timeless design with modern LED technology, these sconces provide warm, dimmable light that creates a cozy atmosphere. Perfect for flanking mirrors, artwork, or as bedside lighting. The solid brass construction ensures longevity and maintains its beautiful finish over time.",
     price: "₹4,299",
     category: "lighting",
-    stock: 3,
     images: [
       "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?auto=format&fit=crop&w=500&q=80",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80",
@@ -2106,7 +2057,6 @@ const initialProducts = [
     fullDescription: "This stunning metal wall sculpture features intricate geometric patterns handcrafted by skilled artisans. The gold finish adds a touch of luxury and sophistication to any space. Each piece is unique, with subtle variations that make it a true work of art. Perfect as a focal point in living rooms, entryways, or above furniture.",
     price: "₹3,499",
     category: "wall-art",
-    stock: 7,
     images: [
       "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=500&q=80",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80",
@@ -2127,7 +2077,6 @@ const initialProducts = [
     fullDescription: "Maximize your space with these elegant corner display shelves. The triangular design fits perfectly into any corner, providing stylish storage without taking up valuable floor space. Made from high-quality MDF with a smooth white finish, these shelves are perfect for displaying photos, plants, or decorative items.",
     price: "₹1,599",
     category: "shelves",
-    stock: 15,
     images: [
       "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=500&q=80",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80"
@@ -2147,7 +2096,6 @@ const initialProducts = [
     fullDescription: "Bring a touch of boho-chic to your space with these beautiful handmade macrame plant hangers. Each set includes three different sized hangers with matching ceramic pots, perfect for displaying your favorite indoor plants. The natural cotton cord and ceramic pots create a warm, organic look that complements any decor style.",
     price: "₹2,199",
     category: "decor",
-    stock: 0,
     images: [
       "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=500&q=80",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80"
@@ -2167,7 +2115,6 @@ const initialProducts = [
     fullDescription: "Create a stunning gallery wall with this set of decorative plates featuring intricate patterns and beautiful colors. Each plate is carefully crafted with attention to detail, making them perfect for adding a touch of elegance to your dining room, kitchen, or hallway. The set comes with mounting hardware for easy installation.",
     price: "₹5,300",
     category: "decor",
-    stock: 2,
     images: [
       "https://shopps.in/wp-content/uploads/2022/01/7111xZqsMGL._AC_SL1500_.jpg",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80"
@@ -2187,7 +2134,6 @@ const initialProducts = [
     fullDescription: "Add a soft, artistic touch to your walls with this beautiful pastel blooms wall art. The delicate floral patterns and soothing pastel colors create a calming atmosphere in any room. Printed on high-quality canvas with fade-resistant inks, this artwork will maintain its vibrant colors for years to come.",
     price: "₹4,600",
     category: "wall-art",
-    stock: 8,
     images: [
       "https://www.ritualistic.in/cdn/shop/files/decorative-plates-pastel-blooms-wall-plates-set-of-5-ritualistic-pastel-blooms-iron-wall-art-multicolor-set-of-5-home-decor-painting-divine-intricate-designs-6161139389153-29181638148.jpg?v=1746967711",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80"
@@ -2208,17 +2154,6 @@ function initializeProducts() {
   renderProducts();
 }
 
-// Get stock status class and text
-function getStockStatus(stock) {
-  if (stock === 0) {
-    return { class: 'stock-out-of-stock', text: 'Out of Stock' };
-  } else if (stock <= 5) {
-    return { class: 'stock-low-stock', text: `Only ${stock} left in stock` };
-  } else {
-    return { class: 'stock-in-stock', text: 'In Stock' };
-  }
-}
-
 // Render products to the grid
 function renderProducts(filterCategory = 'all') {
   const grid = document.getElementById('accessories-grid');
@@ -2229,8 +2164,6 @@ function renderProducts(filterCategory = 'all') {
     : products.filter(product => product.category === filterCategory);
   
   filteredProducts.forEach(product => {
-    const stockStatus = getStockStatus(product.stock);
-    
     const productElement = document.createElement('div');
     productElement.className = 'accessory-item';
     productElement.setAttribute('data-category', product.category);
@@ -2242,18 +2175,16 @@ function renderProducts(filterCategory = 'all') {
         <h4 class="accessory-name">${product.name}</h4>
         <p class="accessory-description">${product.description}</p>
         <p class="accessory-price">${product.price}</p>
-        <div class="stock-status ${stockStatus.class}">
-          <div class="stock-dot"></div>
-          <span>${stockStatus.text}</span>
-        </div>
-        <a href="https://wa.me/917973890562?text=Hi%20Amjo%20Walls,%20I'm%20interested%20in%20${encodeURIComponent(product.name)}" class="accessory-cta" ${product.stock === 0 ? 'style="opacity:0.5; pointer-events:none;"' : ''}>Enquire Now</a>
+        <a href="https://wa.me/917973890562?text=Hi%20Amjo%20Walls,%20I'm%20interested%20in%20${encodeURIComponent(product.name)}" class="accessory-cta">Enquire Now</a>
       </div>
     `;
     
     // Add click event to open product modal
     productElement.addEventListener('click', (e) => {
-      // Don't open modal if clicking the Enquire Now button or stock status
-      if (!e.target.closest('.accessory-cta') && !e.target.closest('.stock-status')) {
+      // Don't open modal if clicking the Enquire Now button
+      if (!e.target.closest('.accessory-cta')) {
+        // Store accessories scroll position before opening modal
+        scrollPositions.accessories = window.scrollY;
         openProductModal(product);
       }
     });
@@ -2283,8 +2214,6 @@ const productModal = document.getElementById('product-modal');
 const productModalClose = document.getElementById('productModalClose');
 
 function openProductModal(product) {
-  const stockStatus = getStockStatus(product.stock);
-  
   // Set main product image
   document.getElementById('product-main-image').src = product.images[0];
   document.getElementById('product-main-image').alt = product.name;
@@ -2298,20 +2227,8 @@ function openProductModal(product) {
   const whatsappLink = document.getElementById('product-whatsapp');
   whatsappLink.href = `https://wa.me/917973890562?text=${encodeURIComponent(`Hi Amjo Walls, I'm interested in: ${product.name} (${product.price})`)}`;
   
-  // Disable button if out of stock
-  if (product.stock === 0) {
-    whatsappLink.style.opacity = '0.5';
-    whatsappLink.style.pointerEvents = 'none';
-    whatsappLink.innerHTML = '<span>Out of Stock</span>';
-  } else {
-    whatsappLink.style.opacity = '1';
-    whatsappLink.style.pointerEvents = 'auto';
-    whatsappLink.innerHTML = '<span>Enquire on WhatsApp</span>';
-  }
-  
   // Set call button
-  const callButton = document.getElementById('product-call');
-  callButton.addEventListener('click', () => {
+  document.getElementById('product-call').addEventListener('click', () => {
     window.location.href = 'tel:+917973890562';
   });
   
@@ -2345,25 +2262,32 @@ function openProductModal(product) {
   const featuresList = document.getElementById('product-features-list');
   featuresList.innerHTML = '';
   
-  // Add stock status to features
-  const stockLi = document.createElement('li');
-  stockLi.innerHTML = `<strong>Stock Status:</strong> ${stockStatus.text}`;
-  featuresList.appendChild(stockLi);
-  
   product.features.forEach(feature => {
     const li = document.createElement('li');
     li.textContent = feature;
     featuresList.appendChild(li);
   });
   
-  // Show modal
+  // Show modal and push to history
   productModal.classList.add('active');
   document.body.style.overflow = 'hidden';
+  
+  history.pushState({ 
+    type: 'modal',
+    productId: product.id
+  }, '', `#product-${product.id}`);
 }
 
 function closeProductModal() {
   productModal.classList.remove('active');
   document.body.style.overflow = '';
+  
+  // Restore accessories scroll position when closing modal
+  if (scrollPositions.accessories > 0) {
+    setTimeout(() => {
+      window.scrollTo(0, scrollPositions.accessories);
+    }, 10);
+  }
 }
 
 // Close modal events
@@ -2381,7 +2305,14 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// Lightbox functionality
+// Handle modal in popstate
+window.addEventListener('popstate', (event) => {
+  if (productModal.classList.contains('active')) {
+    closeProductModal();
+  }
+});
+
+// Lightbox functionality for Featured Wallpapers, Room Types, and Collection Galleries
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightboxImg');
 const lightboxCaption = document.getElementById('lightboxCaption');
@@ -2398,6 +2329,10 @@ function openLightbox(images, index) {
   updateLightbox();
   lightbox.classList.add('active');
   document.body.style.overflow = 'hidden';
+  isLightboxOpen = true;
+  
+  // Add history state for lightbox
+  history.pushState({ type: 'lightbox' }, '');
 }
 
 function updateLightbox() {
@@ -2414,6 +2349,7 @@ function updateLightbox() {
 function closeLightbox() {
   lightbox.classList.remove('active');
   document.body.style.overflow = '';
+  isLightboxOpen = false;
 }
 
 lightboxClose.addEventListener('click', closeLightbox);
@@ -2474,6 +2410,29 @@ roomTypes.forEach(item => {
     const index = parseInt(item.getAttribute('data-index'));
     openLightbox(images, index);
   });
+});
+
+// Add click events to Collection Gallery Items
+function initializeCollectionGalleries() {
+  const collectionGalleries = document.querySelectorAll('.collection-gallery');
+  
+  collectionGalleries.forEach(gallery => {
+    const galleryItems = gallery.querySelectorAll('.gallery-item');
+    
+    galleryItems.forEach(item => {
+      item.addEventListener('click', () => {
+        const images = Array.from(galleryItems).map(el => el.querySelector('img'));
+        const index = Array.from(galleryItems).indexOf(item);
+        openLightbox(images, index);
+      });
+    });
+  });
+}
+
+// Initialize the products and collection galleries when page loads
+document.addEventListener('DOMContentLoaded', function() {
+  initializeProducts();
+  initializeCollectionGalleries();
 });
 </script>
 
