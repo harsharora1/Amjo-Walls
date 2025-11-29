@@ -1469,7 +1469,7 @@
           </div>
           <p style="margin-top:12px;color:var(--muted)">Booking is free and takes just one call. Service area: Moga & nearby towns.</p>
           <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
-            <a class="cta" href="https://wa.me/917973890562?text=Welcome%20to%20Amjo%20Walls%20%E2%80%94%20Moga%2C%20Punjab!%20%F0%9F%8E%A8%0APremium%20wallpapers%20for%20living%20rooms%2C%20bedrooms%20%26%20kids%E2%80%99%20rooms.%0ALeave%20your%20message%20and%20we%E2%80%99ll%20get%20back%20to%20you%20soon.">Book on WhatsApp</a>
+            <a class="cta" href="https://wa.me/917973890562">Book on WhatsApp</a>
             <a class="cta secondary" href="tel:+917973890562">Call: 7973890562</a>
           </div>
         </div>
@@ -1775,18 +1775,14 @@
 </div>
 
 <div class="float-wrap" role="navigation" aria-label="Quick actions">
-  <a class="fab wa" href="https://wa.me/917973890562?text=Welcome%20to%20Amjo%20Walls%20%E2%80%94%20Moga%2C%20Punjab!%20%F0%9F%8E%A8%0APremium%20wallpapers%20for%20living%20rooms%2C%20bedrooms%20%26%20kids%E2%80%99%20rooms.%0ALeave%20your%20message%20and%20we%E2%80%99ll%20get%20back%20to%20you%20soon." title="Chat on WhatsApp" aria-label="WhatsApp">💬</a>
+  <a class="fab wa" href="https://wa.me/917973890562" title="Chat on WhatsApp" aria-label="WhatsApp">💬</a>
   <a class="fab call" href="tel:+917973890562" title="Call now" aria-label="Call">📞</a>
 </div>
 
 <script>
-// COMPLETELY REWRITTEN NAVIGATION SYSTEM - ULTRA SIMPLE AND RELIABLE
-let scrollPositions = {
-  collections: 0,
-  accessories: 0
-};
-let currentPage = 'main';
-let currentCollection = '';
+// COMPLETELY REWRITTEN NAVIGATION SYSTEM - SIMPLE AND RELIABLE
+let currentScrollPosition = 0;
+let isInCollection = false;
 
 // Mobile Navigation
 const menuBtn = document.getElementById('menuBtn');
@@ -1858,31 +1854,14 @@ if (contactForm) {
 // Set current year in footer
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// Track scroll positions
+// Track scroll position
 window.addEventListener('scroll', () => {
-  if (currentPage === 'main') {
-    const collectionsSection = document.getElementById('collections');
-    const accessoriesSection = document.getElementById('accessories');
-    
-    if (collectionsSection && isElementInViewport(collectionsSection)) {
-      scrollPositions.collections = window.scrollY;
-    }
-    
-    if (accessoriesSection && isElementInViewport(accessoriesSection)) {
-      scrollPositions.accessories = window.scrollY;
-    }
+  if (!isInCollection) {
+    currentScrollPosition = window.scrollY;
   }
 });
 
-function isElementInViewport(el) {
-  const rect = el.getBoundingClientRect();
-  return (
-    rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.bottom >= 0
-  );
-}
-
-// Collection navigation - ULTRA SIMPLE AND RELIABLE
+// Collection navigation - SIMPLIFIED AND RELIABLE
 const tiles = document.querySelectorAll('.tile');
 const mainContent = document.getElementById('main-content');
 const collectionPages = document.querySelectorAll('.collection-detail');
@@ -1890,7 +1869,7 @@ const collectionPages = document.querySelectorAll('.collection-detail');
 tiles.forEach(tile => {
   tile.addEventListener('click', () => {
     // Store current scroll position
-    scrollPositions.collections = window.scrollY;
+    currentScrollPosition = window.scrollY;
     
     const collectionId = tile.getAttribute('data-collection');
     const collectionPage = document.getElementById(`${collectionId}-page`);
@@ -1902,19 +1881,18 @@ tiles.forEach(tile => {
       collectionPage.style.display = 'block';
       
       // Update state
-      currentPage = 'collection';
-      currentCollection = collectionId;
+      isInCollection = true;
       
       // Scroll to top of collection page
       window.scrollTo(0, 0);
       
-      // Update URL
+      // Update URL without pushing to history (we'll handle back button separately)
       window.location.hash = collectionId;
     }
   });
 });
 
-// Back to collections function - ULTRA SIMPLE
+// Back to collections function - SIMPLIFIED
 function goBackToCollections() {
   // Hide all collection pages
   collectionPages.forEach(page => {
@@ -1925,12 +1903,11 @@ function goBackToCollections() {
   mainContent.style.display = 'block';
   
   // Update state
-  currentPage = 'main';
-  currentCollection = '';
+  isInCollection = false;
   
   // Restore scroll position
   setTimeout(() => {
-    window.scrollTo(0, scrollPositions.collections);
+    window.scrollTo(0, currentScrollPosition);
   }, 50);
   
   // Update URL
@@ -1949,23 +1926,19 @@ window.addEventListener('popstate', (event) => {
       mainContent.style.display = 'none';
       collectionPages.forEach(page => page.style.display = 'none');
       collectionPage.style.display = 'block';
-      currentPage = 'collection';
-      currentCollection = hash;
+      isInCollection = true;
       window.scrollTo(0, 0);
     }
   } else {
     // Show main content
     mainContent.style.display = 'block';
     collectionPages.forEach(page => page.style.display = 'none');
-    currentPage = 'main';
-    currentCollection = '';
+    isInCollection = false;
     
-    // Restore appropriate scroll position
+    // Restore scroll position
     setTimeout(() => {
-      if (hash === 'collections' && scrollPositions.collections > 0) {
-        window.scrollTo(0, scrollPositions.collections);
-      } else if (hash === 'accessories' && scrollPositions.accessories > 0) {
-        window.scrollTo(0, scrollPositions.accessories);
+      if (hash === 'collections' && currentScrollPosition > 0) {
+        window.scrollTo(0, currentScrollPosition);
       } else if (hash && document.getElementById(hash)) {
         document.getElementById(hash).scrollIntoView({ behavior: 'smooth' });
       }
@@ -1983,8 +1956,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (collectionPage) {
       mainContent.style.display = 'none';
       collectionPage.style.display = 'block';
-      currentPage = 'collection';
-      currentCollection = hash;
+      isInCollection = true;
     }
   }
 });
