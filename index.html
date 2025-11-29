@@ -754,6 +754,35 @@
     gap: 15px;
   }
 
+  /* NEW: Stock Status Styles */
+  .stock-status {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 2;
+  }
+  .stock-in {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+  .stock-limited {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+  }
+  .stock-out {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+
   /* Product Detail Modal */
   .product-modal {
     display: none;
@@ -1428,7 +1457,7 @@
           </div>
           <p style="margin-top:12px;color:var(--muted)">Booking is free and takes just one call. Service area: Moga & nearby towns.</p>
           <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
-            <a class="cta" href="https://wa.me/917973890562">Book on WhatsApp</a>
+            <a class="cta" href="https://wa.me/917973890562?text=Welcome%20to%20Amjo%20Walls%20%E2%80%94%20Moga%2C%20Punjab!%20%F0%9F%8F%A1%E2%9C%A8%F0%9F%8E%A8%0APremium%20wallpapers%20for%20living%20rooms%2C%20bedrooms%20%26%20kids%E2%80%99%20rooms.%20%F0%9F%9B%BB%F0%9F%9B%8F%F0%9F%A7%B8%0ALeave%20your%20message%20and%20we%E2%80%99ll%20get%20back%20to%20you%20soon.%20%F0%9F%93%A9%F0%9F%98%8A">Book on WhatsApp</a>
             <a class="cta secondary" href="tel:+917973890562">Call: 7973890562</a>
           </div>
         </div>
@@ -1734,7 +1763,7 @@
 </div>
 
 <div class="float-wrap" role="navigation" aria-label="Quick actions">
-  <a class="fab wa" href="https://wa.me/917973890562" title="Chat on WhatsApp" aria-label="WhatsApp">💬</a>
+  <a class="fab wa" href="https://wa.me/917973890562?text=Welcome%20to%20Amjo%20Walls%20%E2%80%94%20Moga%2C%20Punjab!%20%F0%9F%8F%A1%E2%9C%A8%F0%9F%8E%A8%0APremium%20wallpapers%20for%20living%20rooms%2C%20bedrooms%20%26%20kids%E2%80%99%20rooms.%20%F0%9F%9B%BB%F0%9F%9B%8F%F0%9F%A7%B8%0ALeave%20your%20message%20and%20we%E2%80%99ll%20get%20back%20to%20you%20soon.%20%F0%9F%93%A9%F0%9F%98%8A" title="Chat on WhatsApp" aria-label="WhatsApp">💬</a>
   <a class="fab call" href="tel:+917973890562" title="Call now" aria-label="Call">📞</a>
 </div>
 
@@ -1892,7 +1921,7 @@ function goBackToCollections() {
   // Restore collections scroll position after DOM update
   setTimeout(() => {
     if (scrollPosition > 0) {
-      window.scrollTo(0, scrollPosition);
+      window.scrollTo({ top: scrollPosition, behavior: 'smooth' });
     }
   }, 100); // Increased timeout to ensure DOM is ready
   
@@ -1936,11 +1965,11 @@ window.addEventListener('popstate', (event) => {
       
       if (state && state.scrollPosition) {
         // Use scroll position from state if available
-        window.scrollTo(0, state.scrollPosition);
+        window.scrollTo({ top: state.scrollPosition, behavior: 'smooth' });
       } else if (hash === 'collections' && scrollPositions.collections > 0) {
-        window.scrollTo(0, scrollPositions.collections);
+        window.scrollTo({ top: scrollPositions.collections, behavior: 'smooth' });
       } else if (hash === 'accessories' && scrollPositions.accessories > 0) {
-        window.scrollTo(0, scrollPositions.accessories);
+        window.scrollTo({ top: scrollPositions.accessories, behavior: 'smooth' });
       }
     }, 100); // Increased timeout to ensure DOM is ready
     
@@ -1977,6 +2006,7 @@ const initialProducts = [
     fullDescription: "This exquisite gold framed mirror features handcrafted gold leaf detailing that adds a touch of luxury and dimension to any room. Perfect for hallways, living rooms, or bedrooms, it not only serves a functional purpose but also acts as a stunning piece of wall art. The mirror is made with high-quality materials to ensure durability and a clear, distortion-free reflection.",
     price: "₹3,799",
     category: "mirrors",
+    stock: "in",
     images: [
       "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=500&q=80",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80",
@@ -1997,6 +2027,7 @@ const initialProducts = [
     fullDescription: "These beautiful floating wood shelves create a modern, minimalist look while providing practical storage space. Made from sustainably sourced solid wood with a natural finish that highlights the wood grain. The set includes three shelves of different sizes (12\", 18\", and 24\") that can be arranged in various configurations to suit your space and needs.",
     price: "₹1,899",
     category: "shelves",
+    stock: "limited",
     images: [
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80",
       "https://images.unsplash.com/photo-1618220252344-8ec99ec624b1?auto=format&fit=crop&w=500&q=80",
@@ -2017,6 +2048,7 @@ const initialProducts = [
     fullDescription: "This elegant minimalist wall clock features a clean, modern design that complements any interior style. The silent quartz movement ensures no distracting ticking sounds, making it perfect for bedrooms, offices, or living spaces. The large, easy-to-read numerals and sleek black hands create a striking contrast against the white background.",
     price: "₹1,299",
     category: "clocks",
+    stock: "in",
     images: [
       "https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?auto=format&fit=crop&w=500&q=80",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80",
@@ -2037,6 +2069,7 @@ const initialProducts = [
     fullDescription: "Add ambient lighting to your space with this pair of elegant brass wall sconces. Featuring a timeless design with modern LED technology, these sconces provide warm, dimmable light that creates a cozy atmosphere. Perfect for flanking mirrors, artwork, or as bedside lighting. The solid brass construction ensures longevity and maintains its beautiful finish over time.",
     price: "₹4,299",
     category: "lighting",
+    stock: "in",
     images: [
       "https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?auto=format&fit=crop&w=500&q=80",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80",
@@ -2057,6 +2090,7 @@ const initialProducts = [
     fullDescription: "This stunning metal wall sculpture features intricate geometric patterns handcrafted by skilled artisans. The gold finish adds a touch of luxury and sophistication to any space. Each piece is unique, with subtle variations that make it a true work of art. Perfect as a focal point in living rooms, entryways, or above furniture.",
     price: "₹3,499",
     category: "wall-art",
+    stock: "limited",
     images: [
       "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=500&q=80",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80",
@@ -2077,6 +2111,7 @@ const initialProducts = [
     fullDescription: "Maximize your space with these elegant corner display shelves. The triangular design fits perfectly into any corner, providing stylish storage without taking up valuable floor space. Made from high-quality MDF with a smooth white finish, these shelves are perfect for displaying photos, plants, or decorative items.",
     price: "₹1,599",
     category: "shelves",
+    stock: "out",
     images: [
       "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=500&q=80",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80"
@@ -2096,6 +2131,7 @@ const initialProducts = [
     fullDescription: "Bring a touch of boho-chic to your space with these beautiful handmade macrame plant hangers. Each set includes three different sized hangers with matching ceramic pots, perfect for displaying your favorite indoor plants. The natural cotton cord and ceramic pots create a warm, organic look that complements any decor style.",
     price: "₹2,199",
     category: "decor",
+    stock: "in",
     images: [
       "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?auto=format&fit=crop&w=500&q=80",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80"
@@ -2115,6 +2151,7 @@ const initialProducts = [
     fullDescription: "Create a stunning gallery wall with this set of decorative plates featuring intricate patterns and beautiful colors. Each plate is carefully crafted with attention to detail, making them perfect for adding a touch of elegance to your dining room, kitchen, or hallway. The set comes with mounting hardware for easy installation.",
     price: "₹5,300",
     category: "decor",
+    stock: "in",
     images: [
       "https://shopps.in/wp-content/uploads/2022/01/7111xZqsMGL._AC_SL1500_.jpg",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80"
@@ -2134,6 +2171,7 @@ const initialProducts = [
     fullDescription: "Add a soft, artistic touch to your walls with this beautiful pastel blooms wall art. The delicate floral patterns and soothing pastel colors create a calming atmosphere in any room. Printed on high-quality canvas with fade-resistant inks, this artwork will maintain its vibrant colors for years to come.",
     price: "₹4,600",
     category: "wall-art",
+    stock: "limited",
     images: [
       "https://www.ritualistic.in/cdn/shop/files/decorative-plates-pastel-blooms-wall-plates-set-of-5-ritualistic-pastel-blooms-iron-wall-art-multicolor-set-of-5-home-decor-painting-divine-intricate-designs-6161139389153-29181638148.jpg?v=1746967711",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=500&q=80"
@@ -2169,13 +2207,32 @@ function renderProducts(filterCategory = 'all') {
     productElement.setAttribute('data-category', product.category);
     productElement.setAttribute('data-id', product.id);
     
+    // Determine stock status text and class
+    let stockText = '';
+    let stockClass = '';
+    switch(product.stock) {
+      case 'in':
+        stockText = 'In Stock';
+        stockClass = 'stock-in';
+        break;
+      case 'limited':
+        stockText = 'Limited Stock';
+        stockClass = 'stock-limited';
+        break;
+      case 'out':
+        stockText = 'Out of Stock';
+        stockClass = 'stock-out';
+        break;
+    }
+    
     productElement.innerHTML = `
+      <div class="stock-status ${stockClass}">${stockText}</div>
       <img src="${product.images[0]}" alt="${product.name}" class="accessory-image">
       <div class="accessory-details">
         <h4 class="accessory-name">${product.name}</h4>
         <p class="accessory-description">${product.description}</p>
         <p class="accessory-price">${product.price}</p>
-        <a href="https://wa.me/917973890562?text=Hi%20Amjo%20Walls,%20I'm%20interested%20in%20${encodeURIComponent(product.name)}" class="accessory-cta">Enquire Now</a>
+        <a href="https://wa.me/917973890562?text=Welcome%20to%20Amjo%20Walls%20%E2%80%94%20Moga%2C%20Punjab!%20%F0%9F%8F%A1%E2%9C%A8%F0%9F%8E%A8%0APremium%20wallpapers%20for%20living%20rooms%2C%20bedrooms%20%26%20kids%E2%80%99%20rooms.%20%F0%9F%9B%BB%F0%9F%9B%8F%F0%9F%A7%B8%0ALeave%20your%20message%20and%20we%E2%80%99ll%20get%20back%20to%20you%20soon.%20%F0%9F%93%A9%F0%9F%98%8A%0A%0AHi%20Amjo%20Walls,%20I'm%20interested%20in%20${encodeURIComponent(product.name)}" class="accessory-cta">Enquire Now</a>
       </div>
     `;
     
@@ -2223,9 +2280,9 @@ function openProductModal(product) {
   document.getElementById('product-price').textContent = product.price;
   document.getElementById('product-full-description').textContent = product.fullDescription;
   
-  // Set WhatsApp link
+  // Set WhatsApp link with custom message
   const whatsappLink = document.getElementById('product-whatsapp');
-  whatsappLink.href = `https://wa.me/917973890562?text=${encodeURIComponent(`Hi Amjo Walls, I'm interested in: ${product.name} (${product.price})`)}`;
+  whatsappLink.href = `https://wa.me/917973890562?text=Welcome%20to%20Amjo%20Walls%20%E2%80%94%20Moga%2C%20Punjab!%20%F0%9F%8F%A1%E2%9C%A8%F0%9F%8E%A8%0APremium%20wallpapers%20for%20living%20rooms%2C%20bedrooms%20%26%20kids%E2%80%99%20rooms.%20%F0%9F%9B%BB%F0%9F%9B%8F%F0%9F%A7%B8%0ALeave%20your%20message%20and%20we%E2%80%99ll%20get%20back%20to%20you%20soon.%20%F0%9F%93%A9%F0%9F%98%8A%0A%0AHi%20Amjo%20Walls,%20I'm%20interested%20in%20${encodeURIComponent(product.name)}%20(${encodeURIComponent(product.price)})`;
   
   // Set call button
   document.getElementById('product-call').addEventListener('click', () => {
@@ -2285,7 +2342,7 @@ function closeProductModal() {
   // Restore accessories scroll position when closing modal
   if (scrollPositions.accessories > 0) {
     setTimeout(() => {
-      window.scrollTo(0, scrollPositions.accessories);
+      window.scrollTo({ top: scrollPositions.accessories, behavior: 'smooth' });
     }, 10);
   }
 }
