@@ -1740,7 +1740,7 @@
 
 <script>
 // COMPLETELY REWRITTEN NAVIGATION SYSTEM
-// Simple, reliable scroll position management
+// Fixed scroll position management
 
 // Store scroll positions
 let scrollPositions = {
@@ -1751,8 +1751,9 @@ let scrollPositions = {
 // Track if lightbox is open
 let isLightboxOpen = false;
 
-// Track current collection
-let currentCollection = null;
+// Track current page state
+let currentPage = 'main';
+let currentCollection = '';
 
 // Mobile Navigation
 const menuBtn = document.getElementById('menuBtn');
@@ -1826,15 +1827,17 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
 // Track scroll positions for different sections
 window.addEventListener('scroll', () => {
-  const collectionsSection = document.getElementById('collections');
-  const accessoriesSection = document.getElementById('accessories');
-  
-  if (collectionsSection && isElementInViewport(collectionsSection)) {
-    scrollPositions.collections = window.scrollY;
-  }
-  
-  if (accessoriesSection && isElementInViewport(accessoriesSection)) {
-    scrollPositions.accessories = window.scrollY;
+  if (currentPage === 'main') {
+    const collectionsSection = document.getElementById('collections');
+    const accessoriesSection = document.getElementById('accessories');
+    
+    if (collectionsSection && isElementInViewport(collectionsSection)) {
+      scrollPositions.collections = window.scrollY;
+    }
+    
+    if (accessoriesSection && isElementInViewport(accessoriesSection)) {
+      scrollPositions.accessories = window.scrollY;
+    }
   }
 });
 
@@ -1846,7 +1849,7 @@ function isElementInViewport(el) {
   );
 }
 
-// Collection navigation - FIXED VERSION
+// Collection navigation - COMPLETELY REWRITTEN
 const tiles = document.querySelectorAll('.tile');
 const mainContent = document.getElementById('main-content');
 const collectionPages = document.querySelectorAll('.collection-detail');
@@ -1860,12 +1863,19 @@ tiles.forEach(tile => {
     const collectionPage = document.getElementById(`${collectionId}-page`);
     
     if (collectionPage) {
+      // Hide main content and show collection page
       mainContent.style.display = 'none';
+      collectionPages.forEach(page => page.style.display = 'none');
       collectionPage.style.display = 'block';
-      window.scrollTo(0, 0);
+      
+      // Update current page state
+      currentPage = 'collection';
       currentCollection = collectionId;
       
-      // Push to history
+      // Scroll to top of collection page
+      window.scrollTo(0, 0);
+      
+      // Push to history with proper state
       history.pushState({ 
         type: 'collection',
         collection: collectionId,
@@ -1875,11 +1885,11 @@ tiles.forEach(tile => {
   });
 });
 
-// Back to collections function - FIXED
+// Back to collections function - COMPLETELY REWRITTEN
 function goBackToCollections() {
-  // Get the stored scroll position from history state
+  // Get the stored scroll position from history state or use default
   const state = history.state;
-  const scrollPosition = state ? state.scrollPosition : scrollPositions.collections;
+  const scrollPosition = state && state.scrollPosition ? state.scrollPosition : scrollPositions.collections;
   
   // Hide all collection pages
   collectionPages.forEach(page => {
@@ -1889,19 +1899,28 @@ function goBackToCollections() {
   // Show main content
   mainContent.style.display = 'block';
   
+  // Update current page state
+  currentPage = 'main';
+  currentCollection = '';
+  
   // Restore collections scroll position after DOM update
   setTimeout(() => {
     if (scrollPosition > 0) {
       window.scrollTo(0, scrollPosition);
+    } else {
+      // If no scroll position stored, scroll to collections section
+      const collectionsSection = document.getElementById('collections');
+      if (collectionsSection) {
+        collectionsSection.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   }, 50);
   
-  // Update history
-  history.pushState({ type: 'main' }, '', window.location.pathname);
-  currentCollection = null;
+  // Update history - go back in history instead of pushing new state
+  history.back();
 }
 
-// Handle browser back/forward buttons - FIXED
+// Handle browser back/forward buttons - COMPLETELY REWRITTEN
 window.addEventListener('popstate', (event) => {
   // Check if lightbox is open and close it first
   if (isLightboxOpen) {
@@ -1911,53 +1930,69 @@ window.addEventListener('popstate', (event) => {
     return;
   }
   
-  if (event.state && event.state.type === 'collection') {
+  // Check if product modal is open and close it
+  if (productModal.classList.contains('active')) {
+    closeProductModal();
+    history.pushState(null, '', window.location.href);
+    return;
+  }
+  
+  const hash = window.location.hash.substring(1);
+  const validCollections = ['vinyl', 'fabric', 'non-woven', 'flora', 'paper', 'textured'];
+  
+  if (validCollections.includes(hash)) {
     // Show collection page
-    mainContent.style.display = 'none';
-    const collectionPage = document.getElementById(`${event.state.collection}-page`);
+    const collectionPage = document.getElementById(`${hash}-page`);
     if (collectionPage) {
+      mainContent.style.display = 'none';
+      collectionPages.forEach(page => page.style.display = 'none');
       collectionPage.style.display = 'block';
+      currentPage = 'collection';
+      currentCollection = hash;
       window.scrollTo(0, 0);
-      currentCollection = event.state.collection;
     }
   } else {
-    // Show main content and restore appropriate scroll position
+    // Show main content
     mainContent.style.display = 'block';
-    collectionPages.forEach(page => {
-      page.style.display = 'none';
-    });
+    collectionPages.forEach(page => page.style.display = 'none');
+    currentPage = 'main';
+    currentCollection = '';
     
-    // Restore scroll position based on current URL hash
+    // Restore appropriate scroll position
     setTimeout(() => {
-      const hash = window.location.hash.substring(1);
       if (hash === 'collections' && scrollPositions.collections > 0) {
         window.scrollTo(0, scrollPositions.collections);
       } else if (hash === 'accessories' && scrollPositions.accessories > 0) {
         window.scrollTo(0, scrollPositions.accessories);
       } else if (event.state && event.state.scrollPosition) {
-        // Use scroll position from state if available
         window.scrollTo(0, event.state.scrollPosition);
+      } else if (hash && document.getElementById(hash)) {
+        // Scroll to section if there's a hash
+        document.getElementById(hash).scrollIntoView({ behavior: 'smooth' });
       }
     }, 50);
-    
-    currentCollection = null;
   }
 });
 
 // Handle direct URL access to collections
 window.addEventListener('DOMContentLoaded', () => {
   const hash = window.location.hash.substring(1);
-  const collectionPage = document.getElementById(`${hash}-page`);
+  const validCollections = ['vinyl', 'fabric', 'non-woven', 'flora', 'paper', 'textured'];
   
-  if (collectionPage) {
-    mainContent.style.display = 'none';
-    collectionPage.style.display = 'block';
-    currentCollection = hash;
-    history.replaceState({ 
-      type: 'collection',
-      collection: hash,
-      scrollPosition: scrollPositions.collections
-    }, '', `#${hash}`);
+  if (validCollections.includes(hash)) {
+    const collectionPage = document.getElementById(`${hash}-page`);
+    if (collectionPage) {
+      mainContent.style.display = 'none';
+      collectionPage.style.display = 'block';
+      currentPage = 'collection';
+      currentCollection = hash;
+      
+      history.replaceState({ 
+        type: 'collection',
+        collection: hash,
+        scrollPosition: 0
+      }, '', `#${hash}`);
+    }
   }
 });
 
@@ -2308,7 +2343,7 @@ window.addEventListener('popstate', (event) => {
   }
 });
 
-// Lightbox functionality for Featured Wallpapers, Room Types, and Collection Galleries
+// Lightbox functionality for Featured Wallpapers and Room Types
 const lightbox = document.getElementById('lightbox');
 const lightboxImg = document.getElementById('lightboxImg');
 const lightboxCaption = document.getElementById('lightboxCaption');
@@ -2408,27 +2443,9 @@ roomTypes.forEach(item => {
   });
 });
 
-// Add click events to Collection Gallery Items
-function initializeCollectionGalleries() {
-  const collectionGalleries = document.querySelectorAll('.collection-gallery');
-  
-  collectionGalleries.forEach(gallery => {
-    const galleryItems = gallery.querySelectorAll('.gallery-item');
-    
-    galleryItems.forEach(item => {
-      item.addEventListener('click', () => {
-        const images = Array.from(galleryItems).map(el => el.querySelector('img'));
-        const index = Array.from(galleryItems).indexOf(item);
-        openLightbox(images, index);
-      });
-    });
-  });
-}
-
-// Initialize the products and collection galleries when page loads
+// Initialize the products when page loads
 document.addEventListener('DOMContentLoaded', function() {
   initializeProducts();
-  initializeCollectionGalleries();
 });
 </script>
 
