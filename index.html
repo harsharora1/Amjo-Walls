@@ -756,16 +756,14 @@
 
   /* NEW: Stock Status Styles */
   .stock-status {
-    position: absolute;
-    top: 12px;
-    right: 12px;
     padding: 4px 10px;
     border-radius: 20px;
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    z-index: 2;
+    display: inline-block;
+    margin-top: 8px;
   }
   .stock-in {
     background: rgba(16, 185, 129, 0.2);
@@ -893,7 +891,11 @@
     font-size: 24px;
     color: var(--accent);
     font-weight: 700;
-    margin: 0 0 20px 0;
+    margin: 0 0 10px 0;
+  }
+
+  .product-stock {
+    margin-bottom: 20px;
   }
 
   .product-full-description {
@@ -1584,6 +1586,9 @@
       <div class="product-details">
         <h1 id="product-title" class="product-title"></h1>
         <p id="product-price" class="product-price"></p>
+        <div id="product-stock" class="product-stock">
+          <!-- Stock status will be added here -->
+        </div>
         <p id="product-full-description" class="product-full-description"></p>
         
         <div class="product-features">
@@ -2226,12 +2231,12 @@ function renderProducts(filterCategory = 'all') {
     }
     
     productElement.innerHTML = `
-      <div class="stock-status ${stockClass}">${stockText}</div>
       <img src="${product.images[0]}" alt="${product.name}" class="accessory-image">
       <div class="accessory-details">
         <h4 class="accessory-name">${product.name}</h4>
         <p class="accessory-description">${product.description}</p>
         <p class="accessory-price">${product.price}</p>
+        <div class="stock-status ${stockClass}">${stockText}</div>
         <a href="https://wa.me/917973890562?text=Welcome%20to%20Amjo%20Walls%20%E2%80%94%20Moga%2C%20Punjab!%20%F0%9F%8F%A1%E2%9C%A8%F0%9F%8E%A8%0APremium%20wallpapers%20for%20living%20rooms%2C%20bedrooms%20%26%20kids%E2%80%99%20rooms.%20%F0%9F%9B%BB%F0%9F%9B%8F%F0%9F%A7%B8%0ALeave%20your%20message%20and%20we%E2%80%99ll%20get%20back%20to%20you%20soon.%20%F0%9F%93%A9%F0%9F%98%8A%0A%0AHi%20Amjo%20Walls,%20I'm%20interested%20in%20${encodeURIComponent(product.name)}" class="accessory-cta">Enquire Now</a>
       </div>
     `;
@@ -2279,6 +2284,26 @@ function openProductModal(product) {
   document.getElementById('product-title').textContent = product.name;
   document.getElementById('product-price').textContent = product.price;
   document.getElementById('product-full-description').textContent = product.fullDescription;
+  
+  // Set stock status
+  const stockElement = document.getElementById('product-stock');
+  let stockText = '';
+  let stockClass = '';
+  switch(product.stock) {
+    case 'in':
+      stockText = 'In Stock';
+      stockClass = 'stock-in';
+      break;
+    case 'limited':
+      stockText = 'Limited Stock';
+      stockClass = 'stock-limited';
+      break;
+    case 'out':
+      stockText = 'Out of Stock';
+      stockClass = 'stock-out';
+      break;
+  }
+  stockElement.innerHTML = `<div class="stock-status ${stockClass}">${stockText}</div>`;
   
   // Set WhatsApp link with custom message
   const whatsappLink = document.getElementById('product-whatsapp');
